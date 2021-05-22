@@ -69,7 +69,14 @@ public class NetworkManager extends SimpleChannelInboundHandler<IPacket> {
         logger.error("Failed to process packet ", cause);
         this.sendPacket(new SPacketPlayerDisconnect(), future -> {
             this.closeChannel();
+            this.handleDisconnection();
         });
+    }
+
+    public void handleDisconnection() {
+        if (this.channel != null && !this.channel.isOpen()) {
+            this.packetListener.onDisconnect();
+        }
     }
 
     public void closeChannel() {

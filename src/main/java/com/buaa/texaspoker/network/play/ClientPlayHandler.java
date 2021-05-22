@@ -27,14 +27,6 @@ public class ClientPlayHandler implements IClientPlayHandler {
     public void processPlayerJoin(SPacketPlayerJoin packet) {
         List<Player> clientList = client.getRoom().getPlayerList();
         List<PlayerProfile> serverList = packet.getProfiles();
-        Iterator<Player> iterator = clientList.iterator();
-        while (iterator.hasNext()) {
-            Player player = iterator.next();
-            if (!serverList.stream().anyMatch(profile -> profile.getUuid().equals(player.getUuid()))) {
-                logger.info("{} leaves the game", player.getName());
-                iterator.remove();
-            }
-        }
 
         boolean newPlayer = clientList.isEmpty();
         Iterator<PlayerProfile> iterator1 = serverList.iterator();
@@ -51,13 +43,21 @@ public class ClientPlayHandler implements IClientPlayHandler {
 
     @Override
     public void processPlayerLeave(SPacketPlayerLeave packet) {
-
+        List<Player> clientList = client.getRoom().getPlayerList();
+        List<PlayerProfile> serverList = packet.getProfiles();
+        Iterator<Player> iterator = clientList.iterator();
+        while (iterator.hasNext()) {
+            Player player = iterator.next();
+            if (!serverList.stream().anyMatch(profile -> profile.getUuid().equals(player.getUuid()))) {
+                logger.info("{} leaves the game", player.getName());
+                iterator.remove();
+            }
+        }
     }
 
     @Override
     public void processPlayerDisconnect(SPacketPlayerDisconnect packet) {
-        logger.info("You have disconnected from server");
-        this.networkManager.closeChannel();
+        this.onDisconnect();
     }
 
     @Override
@@ -73,6 +73,12 @@ public class ClientPlayHandler implements IClientPlayHandler {
         } else {
             logger.info("");
         }
+    }
+
+    @Override
+    public void onDisconnect() {
+        logger.info("You have disconnected from server");
+        this.networkManager.closeChannel();
     }
 
     @Override

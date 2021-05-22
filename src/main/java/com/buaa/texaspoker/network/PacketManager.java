@@ -5,6 +5,7 @@ import com.buaa.texaspoker.network.login.SPacketPlayerCreate;
 import com.buaa.texaspoker.network.play.SPacketPlayerDisconnect;
 import com.buaa.texaspoker.network.play.SPacketPlayerDraw;
 import com.buaa.texaspoker.network.play.SPacketPlayerJoin;
+import com.buaa.texaspoker.network.play.SPacketPlayerLeave;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ public class PacketManager {
         register(CPacketConnect.class);
         register(SPacketPlayerCreate.class);
         register(SPacketPlayerJoin.class);
+        register(SPacketPlayerLeave.class);
         register(SPacketPlayerDisconnect.class);
         register(SPacketPlayerDraw.class);
     }

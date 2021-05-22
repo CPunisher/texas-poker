@@ -25,4 +25,9 @@ public class ClientHandshakeHandler implements IClientHandshakeHandler {
         client.createPlayer(new ClientPlayer(packet.getUuid(), packet.getName(), this.client));
         this.networkManager.setHandler(new ClientPlayHandler(networkManager, client));
     }
+
+    @Override
+    public void onDisconnect() {
+
+    }
 }
