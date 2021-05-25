@@ -26,6 +26,7 @@ public class PacketManager {
         register(CPacketRespondBetting.class);
         register(SPacketShowPoker.class);
         register(SPacketGameEnd.class);
+        register(SPacketRespondBetting.class);
     }
 
     public static void register(Class<? extends IPacket> clazz) {

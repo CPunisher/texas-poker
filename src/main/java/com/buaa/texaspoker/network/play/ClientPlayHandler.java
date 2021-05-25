@@ -6,13 +6,12 @@ import com.buaa.texaspoker.entity.player.ClientPlayer;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.player.PlayerProfile;
 import com.buaa.texaspoker.network.NetworkManager;
+import com.buaa.texaspoker.util.ConsoleUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 
 public class ClientPlayHandler implements IClientPlayHandler {
 
@@ -76,20 +75,30 @@ public class ClientPlayHandler implements IClientPlayHandler {
             logger.info("Your section betting: {}, Section Bonus: {}", packet.getSectionBetting(), packet.getSectionBonus());
             logger.info(String.format("How much do you want to bet [min: %d] [check with -1: %s]: ",
                     packet.getMinimum(), canCheck));
-            int minimum = packet.getMinimum() == 0 ? 1 : packet.getMinimum();
-            // TODO input validate
-            Scanner scanner = new Scanner(System.in);
-            int amount = scanner.nextInt();;
-            while (amount == packet.getSectionBetting() ||
-                    (!canCheck && amount <= 0) ||
-                    (amount > 0 && amount % minimum != 0)) {
-                logger.info("Invalid betting");
-                amount = scanner.nextInt();
-            }
-            this.networkManager.sendPacket(new CPacketRespondBetting(this.client.getPlayer().getUuid(), amount));
+            new Thread(() -> {
+                int minimum = packet.getMinimum() == 0 ? 1 : packet.getMinimum();
+                // TODO input validate
+                int amount = ConsoleUtil.nextInt();
+                while (amount == packet.getSectionBetting() ||
+                        (!canCheck && amount <= 0) ||
+                        (amount > 0 && amount % minimum != 0)) {
+                    logger.info("Invalid betting");
+                    amount = ConsoleUtil.nextInt();
+                }
+                this.networkManager.sendPacket(new CPacketRespondBetting(this.client.getPlayer().generateProfile(), amount));
+            }).start();
         } else {
             Player player = client.getRoom().getPlayerByUuid(packet.getPlayerUuid());
             logger.info("Waiting for {}'s betting [min: {}]", player.getName(), packet.getMinimum());
+        }
+    }
+
+    @Override
+    public void processRespondBetting(SPacketRespondBetting packet) {
+        if (packet.getAmount() > 0) {
+            logger.info("{} Place a {} yuan bet", packet.getProfile().getName(), packet.getAmount());
+        } else {
+            logger.info("{} Check", packet.getProfile().getName());
         }
     }
 

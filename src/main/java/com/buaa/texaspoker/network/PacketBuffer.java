@@ -1,5 +1,7 @@
 package com.buaa.texaspoker.network;
 
+import com.buaa.texaspoker.entity.player.Player;
+import com.buaa.texaspoker.entity.player.PlayerProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
 import io.netty.util.ByteProcessor;
@@ -14,12 +16,22 @@ import java.nio.channels.GatheringByteChannel;
 import java.nio.channels.ScatteringByteChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.UUID;
 
 public class PacketBuffer extends ByteBuf {
 
     private ByteBuf byteBuf;
     public PacketBuffer(ByteBuf byteBuf) {
         this.byteBuf = byteBuf;
+    }
+
+    public void writeProfile(PlayerProfile profile) {
+        this.writeString(profile.getUuid().toString());
+        this.writeString(profile.getName());
+    }
+
+    public PlayerProfile readProfile() {
+        return new PlayerProfile(UUID.fromString(this.readString()), this.readString());
     }
 
     public void writeString(String str) {

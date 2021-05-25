@@ -25,6 +25,8 @@ public class ServerPlayHandler implements IServerPlayHandler {
 
     @Override
     public void processRespondBetting(CPacketRespondBetting packet) {
+        // TODO Synchronize
+        this.server.getPlayerList().sendToAll(new SPacketRespondBetting(packet));
         this.server.getController().respondBetting(this.player, packet.getAmount());
     }
 

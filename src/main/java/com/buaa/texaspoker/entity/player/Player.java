@@ -19,6 +19,10 @@ public abstract class Player {
         this.data = new PlayerGameData();
     }
 
+    public PlayerProfile generateProfile() {
+        return new PlayerProfile(this.getUuid(), this.getName());
+    }
+
     public void setMoney(int money) {
         this.money = money;
     }

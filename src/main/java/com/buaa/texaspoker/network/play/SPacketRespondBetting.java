@@ -4,18 +4,16 @@ import com.buaa.texaspoker.entity.player.PlayerProfile;
 import com.buaa.texaspoker.network.IPacket;
 import com.buaa.texaspoker.network.PacketBuffer;
 
-import java.util.UUID;
-
-public class CPacketRespondBetting implements IPacket<IServerPlayHandler> {
+public class SPacketRespondBetting implements IPacket<IClientPlayHandler> {
 
     private PlayerProfile profile;
     private int amount;
 
-    public CPacketRespondBetting() {}
+    public SPacketRespondBetting() {}
 
-    public CPacketRespondBetting(PlayerProfile profile, int amount) {
-        this.profile = profile;
-        this.amount = amount;
+    public SPacketRespondBetting(CPacketRespondBetting packet) {
+        this.profile = packet.getProfile();
+        this.amount = packet.getAmount();
     }
 
     @Override
@@ -31,7 +29,7 @@ public class CPacketRespondBetting implements IPacket<IServerPlayHandler> {
     }
 
     @Override
-    public void process(IServerPlayHandler netHandler) {
+    public void process(IClientPlayHandler netHandler) {
         netHandler.processRespondBetting(this);
     }
 
