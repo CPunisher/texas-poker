@@ -9,16 +9,19 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.net.InetSocketAddress;
+import java.util.Scanner;
 
 public class GameClient {
 
     private static Logger logger = LogManager.getLogger(GameClient.class);
     private ClientNetworkSystem networkSystem;
+    private String playerName;
     private Player player;
     private Room room;
 
-    public GameClient() {
+    public GameClient(String playerName) {
         PacketManager.init();
+        this.playerName = playerName;
         room = new Room();
     }
 
@@ -26,14 +29,16 @@ public class GameClient {
         logger.info("Connect to " + remoteAddress);
 
         this.networkSystem = new ClientNetworkSystem(this, remoteAddress);
-        this.networkSystem.run();
+        this.networkSystem.run(this.playerName);
     }
 
     public void run() {
     }
 
     public static void main(String[] args) {
-        GameClient client = new GameClient();
+        Scanner scanner = new Scanner(System.in);
+        logger.info("Type your name: ");
+        GameClient client = new GameClient(scanner.nextLine());
         client.connect(new InetSocketAddress(8888));
         client.run();
     }

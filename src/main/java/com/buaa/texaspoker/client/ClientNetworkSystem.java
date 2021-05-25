@@ -32,7 +32,7 @@ public class ClientNetworkSystem {
         this.remoteAddress = remoteAddress;
     }
 
-    public void run() {
+    public void run(String name) {
         NetworkManager networkManager = new NetworkManager();
         Bootstrap bootstrap = new Bootstrap();
         bootstrap.group(new NioEventLoopGroup()).channel(NioSocketChannel.class)
@@ -49,7 +49,7 @@ public class ClientNetworkSystem {
                     }
                 });
         this.endpoint = bootstrap.connect(remoteAddress).syncUninterruptibly();
-        networkManager.sendPacket(new CPacketConnect("CPunisher"));
+        networkManager.sendPacket(new CPacketConnect(name));
     }
 
     public void shutdown() {
