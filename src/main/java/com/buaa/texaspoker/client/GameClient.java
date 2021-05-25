@@ -47,6 +47,6 @@ public class GameClient {
     }
 
     public Player getPlayer() {
-        return room.getPlayerList().get(0);
+        return this.player;
     }
 }

@@ -2,10 +2,7 @@ package com.buaa.texaspoker.network;
 
 import com.buaa.texaspoker.network.login.CPacketConnect;
 import com.buaa.texaspoker.network.login.SPacketPlayerCreate;
-import com.buaa.texaspoker.network.play.SPacketPlayerDisconnect;
-import com.buaa.texaspoker.network.play.SPacketPlayerDraw;
-import com.buaa.texaspoker.network.play.SPacketPlayerJoin;
-import com.buaa.texaspoker.network.play.SPacketPlayerLeave;
+import com.buaa.texaspoker.network.play.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -25,6 +22,10 @@ public class PacketManager {
         register(SPacketPlayerLeave.class);
         register(SPacketPlayerDisconnect.class);
         register(SPacketPlayerDraw.class);
+        register(SPacketRequestBetting.class);
+        register(CPacketRespondBetting.class);
+        register(SPacketShowPoker.class);
+        register(SPacketGameEnd.class);
     }
 
     public static void register(Class<? extends IPacket> clazz) {

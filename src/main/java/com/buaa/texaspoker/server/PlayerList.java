@@ -3,6 +3,7 @@ package com.buaa.texaspoker.server;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.player.ServerPlayer;
 import com.buaa.texaspoker.network.IPacket;
+import com.buaa.texaspoker.network.IPlayerPacketFactory;
 import com.buaa.texaspoker.network.NetworkManager;
 import com.buaa.texaspoker.network.login.SPacketPlayerCreate;
 import com.buaa.texaspoker.network.play.SPacketPlayerJoin;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class PlayerList {
 
@@ -46,6 +48,10 @@ public class PlayerList {
 
     public void sendToAll(IPacket<?> iPacket) {
         this.players.forEach(player -> player.networkManager.sendPacket(iPacket));
+    }
+
+    public void sendToAll(IPlayerPacketFactory packetFactory) {
+        this.players.forEach(player -> player.networkManager.sendPacket(packetFactory.create(player)));
     }
 
     public List<Player> getPlayers() {

@@ -2,6 +2,7 @@ package com.buaa.texaspoker.server;
 
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.network.PacketManager;
+import com.buaa.texaspoker.server.game.GameController;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -46,6 +47,10 @@ public class GameServer {
 
     public PlayerList getPlayerList() {
         return playerList;
+    }
+
+    public GameController getController() {
+        return controller;
     }
 
     public static void main(String[] args) {

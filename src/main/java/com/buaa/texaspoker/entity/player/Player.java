@@ -1,6 +1,5 @@
 package com.buaa.texaspoker.entity.player;
 
-import com.buaa.texaspoker.entity.Poker;
 import com.buaa.texaspoker.network.NetworkManager;
 
 import java.util.UUID;
@@ -11,21 +10,25 @@ public abstract class Player {
     protected final UUID uuid;
     protected String name;
     protected int money;
-    protected Poker pokers[];
+    protected PlayerGameData data;
 
     public Player(UUID uuid, String name) {
         this.uuid = uuid;
         this.name = name;
         this.money = 0;
-        this.pokers = new Poker[2];
+        this.data = new PlayerGameData();
     }
 
-    public void setPoker(int idx, Poker poker) {
-        this.pokers[idx] = poker;
+    public void setMoney(int money) {
+        this.money = money;
     }
 
-    public Poker[] getPokers() {
-        return pokers;
+    public int getMoney() {
+        return money;
+    }
+
+    public PlayerGameData getData() {
+        return data;
     }
 
     public UUID getUuid() {
@@ -34,5 +37,9 @@ public abstract class Player {
 
     public String getName() {
         return name;
+    }
+
+    public void clearData() {
+        this.data = new PlayerGameData();
     }
 }

@@ -25,7 +25,7 @@ public class ServerPlayHandler implements IServerPlayHandler {
 
     @Override
     public void processRespondBetting(CPacketRespondBetting packet) {
-
+        this.server.getController().respondBetting(this.player, packet.getAmount());
     }
 
     @Override

@@ -21,7 +21,8 @@ public class ServerHandshakeHandler implements IServerHandshakeHandler {
 
     @Override
     public void processLogin(CPacketConnect packet) {
-        server.getPlayerList().addPlayer(this.networkManager, new ServerPlayer(packet.getName(), this.server));
+        server.getController().playerEnter(this.networkManager, new ServerPlayer(packet.getName(), this.server));
+//        server.getPlayerList().addPlayer(this.networkManager, new ServerPlayer(packet.getName(), this.server));
     }
 
     @Override
