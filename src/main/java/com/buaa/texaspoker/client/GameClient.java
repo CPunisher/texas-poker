@@ -23,13 +23,12 @@ public class GameClient {
         PacketManager.init();
         this.playerName = playerName;
         room = new Room();
+        this.networkSystem = new ClientNetworkSystem(this, playerName);
     }
 
     private void connect(InetSocketAddress remoteAddress) {
-        logger.info("Connect to " + remoteAddress);
-
-        this.networkSystem = new ClientNetworkSystem(this, remoteAddress);
-        this.networkSystem.run(this.playerName);
+        logger.info("Connect to... " + remoteAddress);
+        this.networkSystem.connect(remoteAddress);
     }
 
     public void run() {
@@ -39,7 +38,10 @@ public class GameClient {
         Scanner scanner = new Scanner(System.in);
         logger.info("Type your name: ");
         GameClient client = new GameClient(scanner.nextLine());
-        client.connect(new InetSocketAddress(8888));
+
+        logger.info("Type server ip: ");
+        String ip = scanner.nextLine();
+        client.connect(new InetSocketAddress(ip, 8888));
         client.run();
     }
 

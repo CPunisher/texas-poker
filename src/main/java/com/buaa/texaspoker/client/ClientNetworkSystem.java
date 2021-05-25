@@ -6,10 +6,9 @@ import com.buaa.texaspoker.network.PacketEncoder;
 import com.buaa.texaspoker.network.login.CPacketConnect;
 import com.buaa.texaspoker.network.login.ClientHandshakeHandler;
 import com.buaa.texaspoker.network.play.ClientPlayHandler;
+import com.buaa.texaspoker.util.ConsoleUtil;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.channel.ChannelFuture;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelPipeline;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
@@ -27,19 +26,21 @@ public class ClientNetworkSystem {
     private ChannelFuture endpoint;
     private InetSocketAddress remoteAddress;
 
-    public ClientNetworkSystem(GameClient client, InetSocketAddress remoteAddress) {
-        this.client = client;
-        this.remoteAddress = remoteAddress;
-    }
+    private String name;
+    private Bootstrap bootstrap;
 
-    public void run(String name) {
-        NetworkManager networkManager = new NetworkManager();
-        Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(new NioEventLoopGroup()).channel(NioSocketChannel.class)
+    public ClientNetworkSystem(GameClient client, String name) {
+        this.client = client;
+        this.name = name;
+
+        this.bootstrap = new Bootstrap();
+        this.bootstrap.group(new NioEventLoopGroup()).channel(NioSocketChannel.class)
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 3000)
                 .handler(new ChannelInitializer<SocketChannel>() {
                     @Override
                     protected void initChannel(SocketChannel socketChannel) throws Exception {
                         ChannelPipeline pipeline = socketChannel.pipeline();
+                        NetworkManager networkManager = new NetworkManager();
                         networkManager.setHandler(new ClientHandshakeHandler(networkManager, client));
                         pipeline.addLast(new LengthFieldPrepender(2));
                         pipeline.addLast(new LengthFieldBasedFrameDecoder(1024, 0, 2, 0, 2));
@@ -48,8 +49,23 @@ public class ClientNetworkSystem {
                         pipeline.addLast(networkManager);
                     }
                 });
-        this.endpoint = bootstrap.connect(remoteAddress).syncUninterruptibly();
-        networkManager.sendPacket(new CPacketConnect(name));
+    }
+
+    public void connect(InetSocketAddress remoteAddress) {
+        ChannelFutureListener retry = new ChannelFutureListener() {
+            @Override
+            public void operationComplete(ChannelFuture future) throws Exception {
+                if (future.isSuccess()) {
+                    future.channel().writeAndFlush(new CPacketConnect(name));
+                } else {
+                    logger.info("Connect timeout, please check and retype server ip:");
+                    String ip = ConsoleUtil.nextLine();
+                    logger.info("Connect to... " + remoteAddress);
+                    bootstrap.connect(new InetSocketAddress(ip, 8888)).addListener(this);
+                }
+            }
+        };
+        this.endpoint = bootstrap.connect(remoteAddress).addListener(retry);
     }
 
     public void shutdown() {
