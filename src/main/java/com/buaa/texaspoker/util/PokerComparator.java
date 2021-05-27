@@ -31,7 +31,7 @@ public class PokerComparator implements Comparator<List<Poker>> {
             int ini= (int) point.get(0);
             int sig=0,sum=ini;
             for(int i=1;i<5;i++){
-                if((int)point.get(i)-ini != -1){
+                if((int)point.get(i)-ini != 1){
                     sig=1;
                 }
                 sum+=(int)point.get(i);
