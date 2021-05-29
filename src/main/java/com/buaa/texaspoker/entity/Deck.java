@@ -18,7 +18,7 @@ public class Deck {
     public static Deck initDeck() {
         Deck deck = new Deck();
         PokerType[] pokerTypes = PokerType.values();
-        for (int i = 0; i < pokerTypes.length; i++) {
+        for (int i = 0; i < 4; i++) {
             for (int j = 2; j <= 14; j++) {
                 deck.pokerList.add(new Poker(j, pokerTypes[i]));
             }

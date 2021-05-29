@@ -5,7 +5,7 @@ import com.buaa.texaspoker.client.GameClient;
 import javax.swing.*;
 import java.awt.*;
 
-public class GameFrame extends JFrame {
+public class GameFrame extends JFrame implements IGameMainFrame {
 
     private final GameClient client;
     private GamePanel gamePanel;
@@ -25,11 +25,11 @@ public class GameFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
-    public GamePanel getGamePanel() {
+    public IGamePanel getGamePanel() {
         return gamePanel;
     }
 
-    public MessagePanel getMessagePanel() {
+    public IMessagePanel getMessagePanel() {
         return messagePanel;
     }
 }

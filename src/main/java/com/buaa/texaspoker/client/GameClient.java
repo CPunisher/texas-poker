@@ -1,9 +1,10 @@
 package com.buaa.texaspoker.client;
 
 
+import com.buaa.texaspoker.client.gui.GameFrame;
 import com.buaa.texaspoker.entity.player.ClientPlayer;
 import com.buaa.texaspoker.entity.player.Player;
-import com.buaa.texaspoker.entity.room.Room;
+import com.buaa.texaspoker.entity.Room;
 import com.buaa.texaspoker.network.PacketManager;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -15,6 +16,7 @@ public class GameClient {
 
     private static Logger logger = LogManager.getLogger(GameClient.class);
     private ClientNetworkSystem networkSystem;
+    private GameFrame gameFrame;
     private String playerName;
     private Player player;
     private Room room;
@@ -24,6 +26,7 @@ public class GameClient {
         this.playerName = playerName;
         room = new Room();
         this.networkSystem = new ClientNetworkSystem(this, playerName);
+        this.gameFrame = new GameFrame("德州扑克", this);
     }
 
     private void connect(InetSocketAddress remoteAddress) {
@@ -32,6 +35,7 @@ public class GameClient {
     }
 
     public void run() {
+        this.gameFrame.setVisible(true);
     }
 
     public static void main(String[] args) {
@@ -42,7 +46,10 @@ public class GameClient {
         logger.info("Type server ip: ");
         String ip = scanner.nextLine();
         client.connect(new InetSocketAddress(ip, 8888));
-        client.run();
+    }
+
+    public GameFrame getGui() {
+        return gameFrame;
     }
 
     public Room getRoom() {

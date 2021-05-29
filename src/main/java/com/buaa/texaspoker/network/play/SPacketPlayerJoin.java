@@ -1,7 +1,6 @@
 package com.buaa.texaspoker.network.play;
 
 import com.buaa.texaspoker.entity.player.Player;
-import com.buaa.texaspoker.entity.player.PlayerProfile;
 import com.buaa.texaspoker.network.IPacket;
 import com.buaa.texaspoker.network.PacketBuffer;
 
@@ -11,31 +10,31 @@ import java.util.UUID;
 
 public class SPacketPlayerJoin implements IPacket<IClientPlayHandler> {
 
-    private List<PlayerProfile> profiles = new LinkedList<>();
+    private List<PlayerJoinData> data = new LinkedList<>();
 
     public SPacketPlayerJoin() {
     }
 
     public SPacketPlayerJoin(List<Player> playerList) {
         playerList.stream()
-                .map(player -> new PlayerProfile(player.getUuid(), player.getName()))
-                .forEach(profiles::add);
+                .forEach(player -> data.add(new PlayerJoinData(player.getUuid(), player.getName(), player.getMoney())));
     }
 
     @Override
     public void readData(PacketBuffer buf) throws Exception {
         int size = buf.readInt();
         for (int i = 0; i < size; i++) {
-            this.profiles.add(new PlayerProfile(UUID.fromString(buf.readString()), buf.readString()));
+            this.data.add(new PlayerJoinData(UUID.fromString(buf.readString()), buf.readString(), buf.readInt()));
         }
     }
 
     @Override
     public void writeData(PacketBuffer buf) throws Exception {
-        buf.writeInt(this.profiles.size());
-        this.profiles.stream().forEach(profile -> {
-            buf.writeString(profile.getUuid().toString());
-            buf.writeString(profile.getName());
+        buf.writeInt(this.data.size());
+        this.data.stream().forEach(data -> {
+            buf.writeString(data.getUuid().toString());
+            buf.writeString(data.getName());
+            buf.writeInt(data.getMoney());
         });
     }
 
@@ -44,7 +43,31 @@ public class SPacketPlayerJoin implements IPacket<IClientPlayHandler> {
         netHandler.processPlayerJoin(this);
     }
 
-    public List<PlayerProfile> getProfiles() {
-        return profiles;
+    public List<PlayerJoinData> getData() {
+        return data;
+    }
+
+    class PlayerJoinData {
+        private UUID uuid;
+        private String name;
+        private int money;
+
+        public PlayerJoinData(UUID uuid, String name, int money) {
+            this.uuid = uuid;
+            this.name = name;
+            this.money = money;
+        }
+
+        public UUID getUuid() {
+            return uuid;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public int getMoney() {
+            return money;
+        }
     }
 }

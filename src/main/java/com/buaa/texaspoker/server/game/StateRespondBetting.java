@@ -19,6 +19,7 @@ public class StateRespondBetting extends GameStateAdapter {
         if (amount > 0) {
             int inc = amount - player.getData().getSection();
             this.controller.sectionBonus += inc;
+            player.setMoney(player.getMoney() - inc);
             player.getData().setSection(amount);
             this.controller.minimum = amount;
             this.controller.lastCheck = -1;

@@ -30,7 +30,7 @@ public class StateNextPoker extends GameStateAdapter {
 
         int count = this.controller.nextShow == 0 ? 3 : 1;
         for (int i = 0; i < count; i++) {
-            IPacket packet = new SPacketShowPoker(this.controller.publicPokers[this.controller.nextShow++]);
+            IPacket packet = new SPacketShowPoker(this.controller.publicPokers[this.controller.nextShow++], this.controller.roundBonus);
             this.controller.getPlayerList().sendToAll(packet);
         }
     }

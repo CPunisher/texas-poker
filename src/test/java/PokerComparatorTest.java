@@ -23,8 +23,8 @@ public class PokerComparatorTest {
         );
 
         List<Poker> list2 = List.of(
-                new Poker(14, PokerType.HEART),
-                new Poker(13, PokerType.HEART),
+                new Poker(14, PokerType.ACE),
+                new Poker(13, PokerType.ACE),
                 new Poker(12, PokerType.ACE),
                 new Poker(11, PokerType.ACE),
                 new Poker(10, PokerType.ACE),
@@ -32,6 +32,6 @@ public class PokerComparatorTest {
                 new Poker(8, PokerType.ACE)
         );
 
-        assertEquals(1, comparator.compare(list1, list2));
+        assertEquals(0, comparator.compare(list1, list2));
     }
 }

@@ -226,7 +226,7 @@ public class PokerComparator implements Comparator<List<Poker>> {
             }
             ans=Integer.max(ans,valueOfFivePokers(tmp));
         }
-        return 1;
+        return ans;
     }
     /**
      * 对比两种牌型的大小

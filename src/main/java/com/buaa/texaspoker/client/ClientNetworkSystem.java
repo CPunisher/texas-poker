@@ -57,6 +57,7 @@ public class ClientNetworkSystem {
             public void operationComplete(ChannelFuture future) throws Exception {
                 if (future.isSuccess()) {
                     future.channel().writeAndFlush(new CPacketConnect(name));
+                    ClientNetworkSystem.this.client.run();
                 } else {
                     logger.info("Connect timeout, please check and retype server ip:");
                     String ip = ConsoleUtil.nextLine();

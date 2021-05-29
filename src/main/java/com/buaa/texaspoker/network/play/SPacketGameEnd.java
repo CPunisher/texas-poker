@@ -9,26 +9,26 @@ import java.util.UUID;
 public class SPacketGameEnd implements IPacket<IClientPlayHandler> {
 
     private PlayerProfile winner;
-    private int playerMoney;
+    private int roundBonus;
 
     public SPacketGameEnd() {}
 
     public SPacketGameEnd(PlayerProfile winner, int playerMoney) {
         this.winner = winner;
-        this.playerMoney = playerMoney;
+        this.roundBonus = playerMoney;
     }
 
     @Override
     public void readData(PacketBuffer buf) throws Exception {
         this.winner = new PlayerProfile(UUID.fromString(buf.readString()), buf.readString());
-        this.playerMoney = buf.readInt();
+        this.roundBonus = buf.readInt();
     }
 
     @Override
     public void writeData(PacketBuffer buf) throws Exception {
         buf.writeString(this.winner.getUuid().toString());
         buf.writeString(this.winner.getName());
-        buf.writeInt(this.playerMoney);
+        buf.writeInt(this.roundBonus);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class SPacketGameEnd implements IPacket<IClientPlayHandler> {
         return winner;
     }
 
-    public int getPlayerMoney() {
-        return playerMoney;
+    public int getRoundBonus() {
+        return roundBonus;
     }
 }

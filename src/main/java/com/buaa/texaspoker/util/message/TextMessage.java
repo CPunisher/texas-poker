@@ -5,8 +5,8 @@ public class TextMessage implements ITextMessage {
     private String key;
     private Object[] formatArgs;
 
-    public TextMessage(String key, Object[] formatArgs) {
-        this.key = key;
+    public TextMessage(Object key, Object... formatArgs) {
+        this.key = key.toString();
         this.formatArgs = formatArgs;
     }
 
