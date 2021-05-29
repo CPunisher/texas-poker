@@ -16,6 +16,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public class PlayerList {
 
@@ -56,5 +57,9 @@ public class PlayerList {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public List<Player> getAlivePlayers() {
+        return players.stream().filter(player -> !player.isOut()).collect(Collectors.toList());
     }
 }

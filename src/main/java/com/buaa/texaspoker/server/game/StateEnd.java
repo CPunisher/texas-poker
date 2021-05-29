@@ -5,6 +5,7 @@ import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.player.PlayerProfile;
 import com.buaa.texaspoker.network.IPacket;
 import com.buaa.texaspoker.network.play.SPacketGameEnd;
+import com.buaa.texaspoker.network.play.SPacketPlayerOut;
 import com.buaa.texaspoker.util.PokerComparator;
 
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class StateEnd extends GameStateAdapter {
 
     @Override
     public void end() {
-        List<Player> result = this.controller.playerList;
+        List<Player> result = this.controller.getPlayerList().getAlivePlayers();
         for (Player player : result) {
             Collections.addAll(player.getData().getPokers(), this.controller.publicPokers);
         }
@@ -29,7 +30,13 @@ public class StateEnd extends GameStateAdapter {
                 .orElseThrow(() -> new IllegalStateException("No player wins."));
         winner.setMoney(winner.getMoney() + this.controller.roundBonus);
         this.controller.getPlayerList().sendToAll((player) ->
-                new SPacketGameEnd(new PlayerProfile(winner.getUuid(), winner.getName()), player.getMoney()));
+                new SPacketGameEnd(new PlayerProfile(winner.getUuid(), winner.getName()), winner.getMoney()));
+        for (Player player : result) {
+            if (player.getMoney() <= 0) {
+                player.setOut(true);
+                this.controller.getPlayerList().sendToAll(new SPacketPlayerOut(player.generateProfile()));
+            }
+        }
     }
 
     @Override

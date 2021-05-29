@@ -10,6 +10,7 @@ public abstract class Player {
     protected final UUID uuid;
     protected String name;
     protected int money;
+    protected boolean isOut;
     protected PlayerGameData data;
 
     public Player(UUID uuid, String name) {
@@ -45,5 +46,13 @@ public abstract class Player {
 
     public void clearData() {
         this.data = new PlayerGameData();
+    }
+
+    public boolean isOut() {
+        return isOut;
+    }
+
+    public void setOut(boolean out) {
+        isOut = out;
     }
 }

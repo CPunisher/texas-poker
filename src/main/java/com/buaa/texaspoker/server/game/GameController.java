@@ -17,7 +17,6 @@ public class GameController implements IGameState {
     private GameServer server;
 
     protected Poker[] publicPokers = new Poker[5];
-    protected List<Player> playerList;
     protected int startIdx;
     protected int nextShow;
     protected int roundBonus;
@@ -32,7 +31,6 @@ public class GameController implements IGameState {
 
     public GameController(GameServer server) {
         this.server = server;
-        this.playerList = server.getPlayerList().getPlayers();
         this.currentState = new StatePlayerEnter(this);
     }
 
@@ -71,7 +69,15 @@ public class GameController implements IGameState {
         }
 
         this.currentState.respondBetting(player, amount);
-        this.requestBetting();
+        if (this.getPlayerList().getPlayers().stream().filter(player1 -> player1.getMoney() > 0).count() > 0) {
+            this.nextBetting();
+            this.requestBetting();
+        } else {
+            while (this.nextShow < this.publicPokers.length) {
+                this.currentState.showNextPoker();
+            }
+            this.currentState.end();
+        }
     }
 
     @Override
@@ -85,7 +91,11 @@ public class GameController implements IGameState {
     }
 
     protected void nextBetting() {
-        this.currentIdx = (this.currentIdx + 1) % this.playerList.size();
+        List<Player> players = this.getPlayerList().getPlayers();
+        do {
+            this.currentIdx = (this.currentIdx + 1) % players.size();
+        } while (players.get(this.currentIdx).isOut() ||
+                (this.currentIdx != this.lastCheck && players.get(this.currentIdx).getMoney() <= 0));
     }
 
     protected void setGameState(IGameState state) {
@@ -101,7 +111,7 @@ public class GameController implements IGameState {
     }
 
     public int getSmallBlind() {
-        return 20 << playerList.stream().filter(player -> player.getMoney() <= 0).count();
+        return 20 << this.getPlayerList().getPlayers().stream().filter(Player::isOut).count();
     }
 
     public GameServer getServer() {

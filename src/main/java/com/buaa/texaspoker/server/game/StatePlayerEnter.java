@@ -11,7 +11,7 @@ public class StatePlayerEnter extends GameStateAdapter {
 
     @Override
     public void playerEnter(NetworkManager networkManager, ServerPlayer player) {
-        player.setMoney(1360);
+        player.setMoney(200);
         this.controller.getPlayerList().addPlayer(networkManager, player);
     }
 

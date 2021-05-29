@@ -18,5 +18,7 @@ public interface IClientPlayHandler extends INetHandler {
 
     void processShowPoker(SPacketShowPoker packet);
 
+    void processPlayerOut(SPacketPlayerOut packet);
+
     void processGameEnd(SPacketGameEnd packet);
 }

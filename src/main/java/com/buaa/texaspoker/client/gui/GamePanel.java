@@ -52,6 +52,9 @@ public class GamePanel extends JPanel implements Runnable, IGamePanel {
         if (player.getData().isChecked()) {
             g.setColor(Color.LIGHT_GRAY);
             g.drawString("Check", x + 10, th2 + 90);
+        } else if (player.isOut()) {
+            g.setColor(Color.RED);
+            g.drawString("Out", x + 10, th2 + 90);
         }
     }
 

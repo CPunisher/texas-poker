@@ -24,7 +24,7 @@ public class StateNextPoker extends GameStateAdapter {
         this.controller.minimum = 0;
         this.controller.lastCheck = -1;
         this.controller.currentIdx = this.controller.startIdx;
-        for (Player player : this.controller.playerList) {
+        for (Player player : this.controller.getPlayerList().getPlayers()) {
             player.getData().setSection(0);
         }
 
@@ -33,5 +33,12 @@ public class StateNextPoker extends GameStateAdapter {
             IPacket packet = new SPacketShowPoker(this.controller.publicPokers[this.controller.nextShow++], this.controller.roundBonus);
             this.controller.getPlayerList().sendToAll(packet);
         }
+    }
+
+    @Override
+    public void end() {
+        IGameState nextState = GameStateFactory.getState(StateEnd.class, this.controller);
+        this.controller.setGameState(nextState);
+        nextState.end();
     }
 }

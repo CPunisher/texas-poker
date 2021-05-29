@@ -92,6 +92,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
                         inc > player.getMoney()) {
                     messagePanel.printMessage(new TextMessage("Invalid betting"));
                     amount = ConsoleUtil.nextInt();
+                    inc = amount - packet.getSectionBetting();
                 }
                 this.networkManager.sendPacket(new CPacketRespondBetting(this.client.getPlayer().generateProfile(), amount));
             }).start();
@@ -128,10 +129,15 @@ public class ClientPlayHandler implements IClientPlayHandler {
     }
 
     @Override
+    public void processPlayerOut(SPacketPlayerOut packet) {
+        this.client.getRoom().getPlayerByUuid(packet.getProfile().getUuid()).setOut(true);
+    }
+
+    @Override
     public void processGameEnd(SPacketGameEnd packet) {
         // TODO Display players card
         Player winner = client.getRoom().getPlayerByUuid(packet.getWinner().getUuid());
-        winner.setMoney(winner.getMoney() + packet.getRoundBonus());
+        winner.setMoney(packet.getWinnerMoney());
         messagePanel.printMessage(new TextMessage("Round complete, winner: %s", packet.getWinner().getName()));
     }
 

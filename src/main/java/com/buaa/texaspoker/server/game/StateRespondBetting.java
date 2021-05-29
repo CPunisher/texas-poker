@@ -29,7 +29,6 @@ public class StateRespondBetting extends GameStateAdapter {
                 this.controller.lastCheck = this.controller.currentIdx;
             }
         }
-        this.controller.nextBetting();
     }
 
     @Override
