@@ -8,18 +8,22 @@ import com.buaa.texaspoker.entity.player.Player;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Objects;
 
 public class GamePanel extends JPanel implements Runnable, IGamePanel {
 
     private final GameClient client;
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 720;
+    private static final int SCALE = 2;
 
-    private static final int PLAYER_WIDTH = 160;
+    private static final int PLAYER_WIDTH = 138;
     private static final int PLAYER_HEIGHT = 200;
 
     private static final Poker UNKNOWN = new Poker(0, PokerType.UNKNOWN);
 
+    private Image pokerImage;
+    private Image background;
     private Thread thread;
     private boolean running;
     private final int FPS = 30;
@@ -30,9 +34,16 @@ public class GamePanel extends JPanel implements Runnable, IGamePanel {
 
     public GamePanel(GameClient client) {
         this.client = client;
+        this.loadImage();
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setFocusable(true);
+        this.setOpaque(false);
         this.requestFocus();
+    }
+
+    private void loadImage() {
+        this.pokerImage = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("assets/image/poker.png"))).getImage();
+        this.background = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("assets/image/background.png"))).getImage();
     }
 
     private void drawPlayerInfo(Player player, int x, int y, int width, int height) {
@@ -40,7 +51,7 @@ public class GamePanel extends JPanel implements Runnable, IGamePanel {
         int centerX = x + width / 2 - radius / 2;
         int ovalY = y + height / 6 - radius / 2;
         int th1 = ovalY + radius + gap, th2 = (int) (ovalY + radius + (radius + extend) * 0.5 * Math.sqrt(3) + gap);
-        g.setColor(player.getData().isBetting() ? Color.RED : Color.BLACK);
+        g.setColor(player.getData().isBetting() ? Color.RED : Color.ORANGE);
         g.setStroke(new BasicStroke(1.5f));
         g.drawRoundRect(x, y, width, height, 5, 5);
         g.fillOval(centerX, ovalY, radius, radius);
@@ -61,20 +72,29 @@ public class GamePanel extends JPanel implements Runnable, IGamePanel {
     private void drawPoker(Poker poker, int x, int y, int width, int height) {
         int point = poker.getPoint();
         PokerType pokerType = poker.getPokerType();
-        g.setColor(pokerType == PokerType.HEART || pokerType == PokerType.DIAMOND ? Color.RED : Color.BLACK);
-        g.setStroke(new BasicStroke(3.0f));
-        g.drawRoundRect(x, y, width, height, 5, 5);
-        g.setFont(g.getFont().deriveFont(30.0f));
-        g.drawString(pokerType.getSymbol(), x + 15, y + 35);
-        if (point > 0) {
-            g.drawString(String.valueOf(point != 14 ? point : "A"), x + width / 2, y + height / 2);
+        int dx = x, dy = y;
+        int sx = 0, sy = 0;
+        if (pokerType == PokerType.UNKNOWN) {
+            sx = 300 * 2;
+            sy = 435 * 4;
         }
+        else {
+            sx = (point - 1) % 13 * 300;
+            switch (pokerType) {
+                case ACE -> sy = 435 * 3;
+                case HEART -> sy = 435 * 2;
+                case CLUB -> sy = 0;
+                case DIAMOND -> sy = 435;
+            }
+        }
+        g.drawImage(pokerImage, dx, dy, dx + width, dy + height, sx, sy, sx + 300, sy + 435, null);
     }
 
     public void draw() {
         // background
         g.setColor(new Color(238, 238, 238));
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+//        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        g.drawImage(this.background, 0, 0, this);
         g.setColor(Color.ORANGE);
         g.setFont(g.getFont().deriveFont(14.0f));
         g.drawString("本轮奖池: " + client.getRoom().getRoundBonus(), 10, HEIGHT - 30);
@@ -135,14 +155,18 @@ public class GamePanel extends JPanel implements Runnable, IGamePanel {
 
     private void init() {
         this.running = true;
-        this.bufferedImage = new BufferedImage(WIDTH, HEIGHT, 1);
+        this.bufferedImage = new BufferedImage(WIDTH * SCALE, HEIGHT * SCALE, 1);
         this.g = (Graphics2D) bufferedImage.getGraphics();
         this.g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        this.g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        this.g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE);
+        g.scale(SCALE, SCALE);
     }
 
     private void drawToScreen() {
-        Graphics g2 = this.getGraphics();
-        g2.drawImage(bufferedImage, 0, 0, this.getWidth(), this.getHeight(), null);
+        Graphics2D g2 = (Graphics2D) this.getGraphics();
+        g2.scale(1.0 / SCALE, 1.0 / SCALE);
+        g2.drawImage(bufferedImage, 0, 0, this);
         g2.dispose();
     }
 }
