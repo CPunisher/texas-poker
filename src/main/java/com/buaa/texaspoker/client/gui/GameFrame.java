@@ -71,9 +71,15 @@ public class GameFrame extends JFrame implements IGameMainFrame, Runnable {
         }
     }
 
-    public IGamePanel getGamePanel() {
+    public void loadPokers() {
+        this.pokerPanel.loadPokers();
+    }
+
+    public IGamePanel getPlayerPanel() {
         return playerPanel;
     }
+
+    public IGamePanel getPokerPanel() { return pokerPanel; }
 
     public IMessagePanel getMessagePanel() {
         return messagePanel;

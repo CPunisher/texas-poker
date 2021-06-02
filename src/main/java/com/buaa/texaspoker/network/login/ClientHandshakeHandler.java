@@ -23,6 +23,7 @@ public class ClientHandshakeHandler implements IClientHandshakeHandler {
     @Override
     public void processPlayerCreate(SPacketPlayerCreate packet) {
         client.createPlayer(new ClientPlayer(packet.getUuid(), packet.getName(), this.client));
+        client.run();
         this.networkManager.setHandler(new ClientPlayHandler(networkManager, client));
     }
 

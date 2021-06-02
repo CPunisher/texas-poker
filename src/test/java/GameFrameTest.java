@@ -4,6 +4,7 @@ import com.buaa.texaspoker.entity.Poker;
 import com.buaa.texaspoker.entity.PokerType;
 import com.buaa.texaspoker.entity.player.ClientPlayer;
 import com.buaa.texaspoker.entity.Room;
+import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.util.message.TextMessage;
 import org.junit.Test;
 
@@ -19,6 +20,8 @@ public class GameFrameTest {
         GameClient client = mock(GameClient.class);
 
         Room room = new Room();
+        ClientPlayer player = new ClientPlayer(UUID.randomUUID(), "CPunisher", client);
+        player.getData().getPokers().add(new Poker(11, PokerType.ACE));
         for (int i = 0; i < 10; i++) {
             room.getPlayerList().add(new ClientPlayer(UUID.randomUUID(), "test" + i, client));
         }
@@ -26,8 +29,9 @@ public class GameFrameTest {
         room.getPublicPokers().add(new Poker(4, PokerType.HEART));
         room.getPublicPokers().add(new Poker(14, PokerType.DIAMOND));
 
-        GameFrame gameFrame = new GameFrame("test frame", client);
+        when(client.getPlayer()).thenReturn(player);
         when(client.getRoom()).thenReturn(room);
+        GameFrame gameFrame = new GameFrame("test frame", client);
         when(client.getGui()).thenReturn(gameFrame);
         gameFrame.setVisible(true);
         for (int i = 0; i < 50; i++) {

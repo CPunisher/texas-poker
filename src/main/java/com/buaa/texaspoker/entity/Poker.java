@@ -1,5 +1,7 @@
 package com.buaa.texaspoker.entity;
 
+import com.buaa.texaspoker.util.Constant;
+
 public class Poker {
     private int point;
     private PokerType pokerType;
@@ -19,9 +21,6 @@ public class Poker {
 
     @Override
     public String toString() {
-        return "Poker{" +
-                "point=" + point +
-                ", pokerType=" + pokerType +
-                '}';
+        return this.pokerType.toString() + " " + Constant.POINT_NAMES[this.point];
     }
 }

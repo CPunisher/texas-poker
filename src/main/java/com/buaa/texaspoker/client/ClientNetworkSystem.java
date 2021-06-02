@@ -57,7 +57,6 @@ public class ClientNetworkSystem {
             public void operationComplete(ChannelFuture future) throws Exception {
                 if (future.isSuccess()) {
                     future.channel().writeAndFlush(new CPacketConnect(name));
-                    ClientNetworkSystem.this.client.run();
                 } else {
                     logger.info("Connect timeout, please check and retype server ip:");
                     String ip = ConsoleUtil.nextLine();
@@ -66,7 +65,7 @@ public class ClientNetworkSystem {
                 }
             }
         };
-        this.endpoint = bootstrap.connect(remoteAddress).addListener(retry);
+        this.endpoint = bootstrap.connect(remoteAddress).addListener(retry).syncUninterruptibly();
     }
 
     public void shutdown() {

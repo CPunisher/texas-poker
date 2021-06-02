@@ -2,6 +2,8 @@ package com.buaa.texaspoker.client.gui;
 
 import com.buaa.texaspoker.client.GameClient;
 import com.buaa.texaspoker.entity.player.Player;
+import com.buaa.texaspoker.util.Constant;
+
 import java.awt.*;
 
 public class PlayerPanel extends AbstractGamePanel {

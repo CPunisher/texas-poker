@@ -26,7 +26,6 @@ public class GameClient {
         this.playerName = playerName;
         room = new Room();
         this.networkSystem = new ClientNetworkSystem(this, playerName);
-        this.gameFrame = new GameFrame("德州扑克", this);
     }
 
     private void connect(InetSocketAddress remoteAddress) {
@@ -35,6 +34,7 @@ public class GameClient {
     }
 
     public void run() {
+        this.gameFrame = new GameFrame("德州扑克", this);
         this.gameFrame.setVisible(true);
     }
 

@@ -70,6 +70,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
         messagePanel.printMessage(new TextMessage(packet.getPokers()));
         this.client.getRoom().getPublicPokers().clear();
         this.client.getPlayer().getData().setPokers(packet.getPokers());
+        client.getGui().loadPokers();
     }
 
     @Override
@@ -126,6 +127,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
             player.getData().setChecked(false);
             player.getData().setSection(0);
         }
+        client.getGui().loadPokers();
     }
 
     @Override
