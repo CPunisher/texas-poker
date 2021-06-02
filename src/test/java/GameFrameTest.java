@@ -4,6 +4,7 @@ import com.buaa.texaspoker.entity.Poker;
 import com.buaa.texaspoker.entity.PokerType;
 import com.buaa.texaspoker.entity.player.ClientPlayer;
 import com.buaa.texaspoker.entity.Room;
+import com.buaa.texaspoker.util.message.TextMessage;
 import org.junit.Test;
 
 import javax.swing.*;
@@ -25,9 +26,14 @@ public class GameFrameTest {
         room.getPublicPokers().add(new Poker(4, PokerType.HEART));
         room.getPublicPokers().add(new Poker(14, PokerType.DIAMOND));
 
-        when(client.getRoom()).thenReturn(room);
         GameFrame gameFrame = new GameFrame("test frame", client);
+        when(client.getRoom()).thenReturn(room);
+        when(client.getGui()).thenReturn(gameFrame);
         gameFrame.setVisible(true);
+        for (int i = 0; i < 50; i++) {
+            client.getGui().getMessagePanel().printMessage(new TextMessage("Test Msg"));
+        }
+
         Thread.sleep(5000);
     }
 }
