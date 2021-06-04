@@ -63,9 +63,15 @@ public class PlayerList {
         return players.stream().filter(player -> !player.isOut()).collect(Collectors.toList());
     }
 
+    public List<Player> getCalculatedPlayers() {
+        return this.getPlayers().stream()
+                .filter(player1 -> !player1.getData().isGiveUp() && !player1.isOut())
+                .collect(Collectors.toList());
+    }
+
     public List<Player> getAvailablePlayers() {
         return this.getPlayers().stream()
-                .filter(player1 -> player1.getMoney() > 0 && !player1.getData().isGiveUp())
+                .filter(player1 -> player1.getMoney() > 0 && !player1.getData().isGiveUp() && !player1.isOut())
                 .collect(Collectors.toList());
     }
 }

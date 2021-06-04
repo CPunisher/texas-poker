@@ -9,6 +9,7 @@ import com.buaa.texaspoker.server.PlayerList;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class GameController implements IGameState {
@@ -92,13 +93,17 @@ public class GameController implements IGameState {
         this.currentState.end();
     }
 
-    protected void nextBetting() {
+    protected boolean nextBetting() {
         List<Player> players = this.getPlayerList().getPlayers();
+        List<Integer> checked = new LinkedList<>();
         do {
             this.currentIdx = (this.currentIdx + 1) % players.size();
+            if (checked.contains(this.currentIdx)) return false;
+            checked.add(this.currentIdx);
         } while (players.get(this.currentIdx).isOut() ||
                 players.get(this.currentIdx).getData().isGiveUp() ||
                 (this.currentIdx != this.lastCheck && players.get(this.currentIdx).getMoney() <= 0));
+        return true;
     }
 
     protected void setGameState(IGameState state) {

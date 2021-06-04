@@ -12,9 +12,9 @@ public class DialogTest {
         frame.setSize(1280, 720);
         frame.setVisible(true);
 
-        BettingDialog dialog = new BettingDialog(frame, new SPacketRequestBetting(null, false, 0, 20),true);
-        dialog.setVisible(true);
-        dialog.dispose();
-        System.out.println(dialog.getValue());
+//        BettingDialog dialog = new BettingDialog(frame, new SPacketRequestBetting(null, false, 0, 20),true);
+//        dialog.setVisible(true);
+//        dialog.dispose();
+//        System.out.println(dialog.getValue());
     }
 }

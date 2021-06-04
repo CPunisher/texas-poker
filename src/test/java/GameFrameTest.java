@@ -38,6 +38,6 @@ public class GameFrameTest {
             client.getGui().getMessagePanel().printMessage(new TextMessage("Test Msg"));
         }
 
-        Thread.sleep(5000);
+//        Thread.sleep(5000);
     }
 }
