@@ -33,7 +33,7 @@ public class StateEnd extends GameStateAdapter {
                 .orElseThrow(() -> new IllegalStateException("No player wins."));
         winner.setMoney(winner.getMoney() + this.controller.roundBonus);
         this.controller.getPlayerList().sendToAll((player) ->
-                new SPacketGameEnd(new PlayerProfile(winner.getUuid(), winner.getName()), winner.getMoney()));
+                new SPacketGameEnd(new PlayerProfile(winner.getUuid(), winner.getName()), winner.getMoney(), winner.getData().getPokers()));
         for (Player player : result) {
             if (player.getMoney() <= 0) {
                 player.setOut(true);

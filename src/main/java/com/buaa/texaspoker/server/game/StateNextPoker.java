@@ -23,7 +23,8 @@ public class StateNextPoker extends GameStateAdapter {
         this.controller.sectionBonus = 0;
         this.controller.minimum = 0;
         this.controller.lastCheck = -1;
-        this.controller.currentIdx = this.controller.startIdx;
+        this.controller.currentIdx = this.controller.startIdx - 1;
+        this.controller.nextBetting();
         for (Player player : this.controller.getPlayerList().getPlayers()) {
             player.getData().setSection(0);
         }

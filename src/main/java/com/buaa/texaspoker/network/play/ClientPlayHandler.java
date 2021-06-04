@@ -143,6 +143,8 @@ public class ClientPlayHandler implements IClientPlayHandler {
         // TODO Display players card
         Player winner = client.getRoom().getPlayerByUuid(packet.getWinner().getUuid());
         winner.setMoney(packet.getWinnerMoney());
+        winner.getData().setWinner(true);
+        winner.getData().setPokers(packet.getPokers());
         messagePanel.printMessage(new TextMessage("Round complete, winner: %s", packet.getWinner().getName()));
     }
 

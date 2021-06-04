@@ -25,6 +25,7 @@ public class StateRespondBetting extends GameStateAdapter {
             this.controller.lastCheck = -1;
         } else if (amount == -1) {
             // Check
+            player.getData().setChecked(true);
             if (this.controller.lastCheck == -1) {
                 this.controller.lastCheck = this.controller.currentIdx;
             }

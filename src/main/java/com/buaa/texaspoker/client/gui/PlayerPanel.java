@@ -1,6 +1,7 @@
 package com.buaa.texaspoker.client.gui;
 
 import com.buaa.texaspoker.client.GameClient;
+import com.buaa.texaspoker.entity.Poker;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.util.Constant;
 
@@ -38,6 +39,14 @@ public class PlayerPanel extends AbstractGamePanel {
         } else if (player.getData().isGiveUp()) {
             g.setColor(Color.LIGHT_GRAY);
             g.drawString("Give up", x + 10, th2 + 90);
+        }
+
+        int overlap = 30;
+        if (player.getData().isWinner()) {
+            for (int i = 0; i < 2; i++) {
+                Poker poker = player.getData().getPokers().get(i);
+                HiddenPokerPanel.drawPoker(g, poker, x + i * overlap, y + height / 4, width, height);
+            }
         }
     }
 

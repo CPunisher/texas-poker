@@ -14,12 +14,14 @@ public class HiddenPokerPanel extends JPanel implements MouseListener {
     private static final Poker UNKNOWN = new Poker(0, PokerType.UNKNOWN);
     private Poker poker;
     private boolean hidden = true;
-    private boolean alwaysShow = true;
-    private Image pokerImage;
+    private boolean alwaysShow;
+    private static Image pokerImage;
+    static {
+        pokerImage = new ImageIcon(Objects.requireNonNull(HiddenPokerPanel.class.getClassLoader().getResource("assets/image/poker.png"))).getImage();
+    }
 
     public HiddenPokerPanel(Poker poker, boolean alwaysShow) {
         this.poker = poker;
-        this.pokerImage = new ImageIcon(Objects.requireNonNull(getClass().getClassLoader().getResource("assets/image/poker.png"))).getImage();
         this.addMouseListener(this);
         this.alwaysShow = alwaysShow;
     }
@@ -30,9 +32,12 @@ public class HiddenPokerPanel extends JPanel implements MouseListener {
 
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        int point = getPoker().getPoint();
-        PokerType pokerType = getPoker().getPokerType();
-        int dx = 0, dy = 0;
+        drawPoker(g, getPoker(), 0, 0, getWidth(), getHeight());
+    }
+
+    public static void drawPoker(Graphics g, Poker poker, int dx, int dy, int width, int height) {
+        int point = poker.getPoint();
+        PokerType pokerType = poker.getPokerType();
         int sx, sy = 0;
         if (pokerType == PokerType.UNKNOWN) {
             sx = 300 * 2;
@@ -47,7 +52,8 @@ public class HiddenPokerPanel extends JPanel implements MouseListener {
                 case DIAMOND -> sy = 435;
             }
         }
-        g.drawImage(pokerImage, dx, dy, dx + getWidth(), dy + getHeight(), sx, sy, sx + 300, sy + 435, null);
+        g.drawImage(pokerImage, dx, dy, dx + width, dy + height, sx, sy, sx + 300, sy + 435, null);
+
     }
 
     public Poker getPoker() {

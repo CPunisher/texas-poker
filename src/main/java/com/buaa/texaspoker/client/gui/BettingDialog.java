@@ -50,7 +50,7 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
                 JOptionPane.YES_NO_CANCEL_OPTION,
                 null,
                 options,
-                options[0]);
+                betButton);
         this.setContentPane(optionPane);
         this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 

@@ -1,6 +1,7 @@
 package com.buaa.texaspoker.network;
 
-import com.buaa.texaspoker.entity.player.Player;
+import com.buaa.texaspoker.entity.Poker;
+import com.buaa.texaspoker.entity.PokerType;
 import com.buaa.texaspoker.entity.player.PlayerProfile;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufAllocator;
@@ -23,6 +24,15 @@ public class PacketBuffer extends ByteBuf {
     private ByteBuf byteBuf;
     public PacketBuffer(ByteBuf byteBuf) {
         this.byteBuf = byteBuf;
+    }
+
+    public void writePoker(Poker poker) {
+        this.writeInt(poker.getPoint());
+        this.writeInt(poker.getPokerType().ordinal());
+    }
+
+    public Poker readPoker() {
+        return new Poker(this.readInt(), PokerType.values()[this.readInt()]);
     }
 
     public void writeProfile(PlayerProfile profile) {
