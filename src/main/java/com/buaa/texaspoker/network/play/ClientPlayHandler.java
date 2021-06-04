@@ -1,6 +1,7 @@
 package com.buaa.texaspoker.network.play;
 
 import com.buaa.texaspoker.client.GameClient;
+import com.buaa.texaspoker.client.gui.BettingDialog;
 import com.buaa.texaspoker.client.gui.IMessagePanel;
 import com.buaa.texaspoker.entity.Poker;
 import com.buaa.texaspoker.entity.player.ClientPlayer;
@@ -85,17 +86,20 @@ public class ClientPlayHandler implements IClientPlayHandler {
             new Thread(() -> {
                 int minimum = packet.getMinimum() == 0 ? 1 : packet.getMinimum();
                 // TODO input validate
-                int amount = ConsoleUtil.nextInt();
-                int inc = amount - packet.getSectionBetting();
-                while (amount == packet.getSectionBetting() ||
-                        (!canCheck && amount <= 0) ||
-                        (amount > 0 && amount % minimum != 0) ||
-                        inc > player.getMoney()) {
-                    messagePanel.printMessage(new TextMessage("Invalid betting"));
-                    amount = ConsoleUtil.nextInt();
-                    inc = amount - packet.getSectionBetting();
-                }
-                this.networkManager.sendPacket(new CPacketRespondBetting(this.client.getPlayer().generateProfile(), amount));
+//                int amount = ConsoleUtil.nextInt();
+//                int inc = amount - packet.getSectionBetting();
+//                while (amount == packet.getSectionBetting() ||
+//                        (!canCheck && amount <= 0) ||
+//                        (amount > 0 && amount % minimum != 0) ||
+//                        inc > player.getMoney()) {
+//                    messagePanel.printMessage(new TextMessage("Invalid betting"));
+//                    amount = ConsoleUtil.nextInt();
+//                    inc = amount - packet.getSectionBetting();
+//                }
+                BettingDialog dialog = new BettingDialog(client.getGui(), packet.getSectionBetting(), packet.getSectionBonus(), minimum, packet.getPlayerMoney(), canCheck);
+                dialog.setVisible(true);
+                dialog.dispose();
+                this.networkManager.sendPacket(new CPacketRespondBetting(this.client.getPlayer().generateProfile(), dialog.getValue()));
             }).start();
         } else {
             messagePanel.printMessage(new TextMessage("Waiting for %s's betting [min: %d]", player.getName(), packet.getMinimum()));
