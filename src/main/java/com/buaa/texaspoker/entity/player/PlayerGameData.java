@@ -14,6 +14,7 @@ public class PlayerGameData {
     private int section;
     private boolean betting;
     private boolean checked;
+    private boolean giveUp;
 
     public PlayerGameData() {
         this.pokers = new LinkedList<>();
@@ -49,5 +50,13 @@ public class PlayerGameData {
 
     public void setChecked(boolean checked) {
         this.checked = checked;
+    }
+
+    public boolean isGiveUp() {
+        return giveUp;
+    }
+
+    public void setGiveUp(boolean giveUp) {
+        this.giveUp = giveUp;
     }
 }

@@ -62,4 +62,10 @@ public class PlayerList {
     public List<Player> getAlivePlayers() {
         return players.stream().filter(player -> !player.isOut()).collect(Collectors.toList());
     }
+
+    public List<Player> getAvailablePlayers() {
+        return this.getPlayers().stream()
+                .filter(player1 -> player1.getMoney() > 0 && !player1.getData().isGiveUp())
+                .collect(Collectors.toList());
+    }
 }

@@ -9,6 +9,7 @@ import java.util.UUID;
 public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
 
     private UUID playerUuid;
+    private boolean canGiveUp;
     private int sectionBetting;
     private int minimum;
     private int playerMoney;
@@ -16,8 +17,9 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
 
     public SPacketRequestBetting() {}
 
-    public SPacketRequestBetting(Player player, int minimum, int sectionBonus) {
+    public SPacketRequestBetting(Player player, boolean canGiveUp, int minimum, int sectionBonus) {
         this.playerUuid = player.getUuid();
+        this.canGiveUp = canGiveUp;
         this.sectionBetting = player.getData().getSection();
         this.minimum = minimum;
         this.playerMoney = player.getMoney();
@@ -27,6 +29,7 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
     @Override
     public void readData(PacketBuffer buf) throws Exception {
         this.playerUuid = UUID.fromString(buf.readString());
+        this.canGiveUp = buf.readBoolean();
         this.sectionBetting = buf.readInt();
         this.minimum = buf.readInt();
         this.playerMoney = buf.readInt();
@@ -36,7 +39,8 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
     @Override
     public void writeData(PacketBuffer buf) throws Exception {
         buf.writeString(playerUuid.toString());
-        buf.writeInt(this.sectionBetting);
+        buf.writeBoolean(canGiveUp);
+        buf.writeInt(sectionBetting);
         buf.writeInt(minimum);
         buf.writeInt(playerMoney);
         buf.writeInt(sectionBonus);
@@ -65,5 +69,9 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
 
     public int getSectionBetting() {
         return sectionBetting;
+    }
+
+    public boolean canGiveUp() {
+        return canGiveUp;
     }
 }

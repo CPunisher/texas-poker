@@ -11,6 +11,7 @@ import com.buaa.texaspoker.util.PokerComparator;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class StateEnd extends GameStateAdapter {
     private Comparator<List<Poker>> comparator = new PokerComparator();
@@ -21,7 +22,9 @@ public class StateEnd extends GameStateAdapter {
 
     @Override
     public void end() {
-        List<Player> result = this.controller.getPlayerList().getAlivePlayers();
+        List<Player> result = this.controller.getPlayerList().getPlayers().stream()
+                .filter(player -> !player.isOut() && !player.getData().isGiveUp())
+                .collect(Collectors.toList());
         for (Player player : result) {
             Collections.addAll(player.getData().getPokers(), this.controller.publicPokers);
         }

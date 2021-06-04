@@ -11,6 +11,8 @@ import com.buaa.texaspoker.network.NetworkManager;
 import com.buaa.texaspoker.util.ConsoleUtil;
 import com.buaa.texaspoker.util.message.TextMessage;
 
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Iterator;
 import java.util.List;
 
@@ -71,6 +73,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
         messagePanel.printMessage(new TextMessage(packet.getPokers()));
         this.client.getRoom().getPublicPokers().clear();
         this.client.getPlayer().getData().setPokers(packet.getPokers());
+        this.client.getRoom().getPlayerList().forEach(player -> player.clearData());
         client.getGui().loadPokers();
     }
 
@@ -83,24 +86,17 @@ public class ClientPlayHandler implements IClientPlayHandler {
             boolean canCheck = packet.getSectionBetting() >= packet.getMinimum();
             messagePanel.printMessage(new TextMessage("Your section betting: %d, Section Bonus: %d", packet.getSectionBetting(), packet.getSectionBonus()));
             messagePanel.printMessage(new TextMessage("How much do you want to bet [min: %d] [check with -1: %s]: ", packet.getMinimum(), canCheck));
-            new Thread(() -> {
-                int minimum = packet.getMinimum() == 0 ? 1 : packet.getMinimum();
-                // TODO input validate
-//                int amount = ConsoleUtil.nextInt();
-//                int inc = amount - packet.getSectionBetting();
-//                while (amount == packet.getSectionBetting() ||
-//                        (!canCheck && amount <= 0) ||
-//                        (amount > 0 && amount % minimum != 0) ||
-//                        inc > player.getMoney()) {
-//                    messagePanel.printMessage(new TextMessage("Invalid betting"));
-//                    amount = ConsoleUtil.nextInt();
-//                    inc = amount - packet.getSectionBetting();
-//                }
-                BettingDialog dialog = new BettingDialog(client.getGui(), packet.getSectionBetting(), packet.getSectionBonus(), minimum, packet.getPlayerMoney(), canCheck);
-                dialog.setVisible(true);
-                dialog.dispose();
-                this.networkManager.sendPacket(new CPacketRespondBetting(this.client.getPlayer().generateProfile(), dialog.getValue()));
-            }).start();
+
+            BettingDialog dialog = new BettingDialog(client.getGui(), packet, canCheck);
+            dialog.addComponentListener(new ComponentAdapter() {
+                @Override
+                public void componentHidden(ComponentEvent e) {
+                    networkManager.sendPacket(new CPacketRespondBetting(client.getPlayer().generateProfile(), dialog.getValue()));
+                    dialog.dispose();
+                }
+            });
+            dialog.setVisible(true);
+
         } else {
             messagePanel.printMessage(new TextMessage("Waiting for %s's betting [min: %d]", player.getName(), packet.getMinimum()));
         }
@@ -114,9 +110,12 @@ public class ClientPlayHandler implements IClientPlayHandler {
             player.setMoney(player.getMoney() + player.getData().getSection() - packet.getAmount());
             player.getData().setSection(packet.getAmount());
             client.getRoom().getPlayerList().forEach(player1 -> player1.getData().setChecked(false));
-        } else {
+        } else if (packet.getAmount() == -1) {
             messagePanel.printMessage(new TextMessage("%s Check", packet.getProfile().getName()));
             player.getData().setChecked(true);
+        } else if (packet.getAmount() == -2) {
+            messagePanel.printMessage(new TextMessage("%s Give up", packet.getProfile().getName()));
+            player.getData().setGiveUp(true);
         }
         player.getData().setBetting(false);
     }

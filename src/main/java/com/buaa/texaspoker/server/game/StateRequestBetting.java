@@ -13,7 +13,10 @@ public class StateRequestBetting extends GameStateAdapter {
     public void requestBetting() {
         if (this.controller.isBigBlind()) this.controller.minimum *= 2;
         this.controller.current = this.controller.getPlayerList().getPlayers().get(this.controller.currentIdx);
-        IPacket packet = new SPacketRequestBetting(this.controller.current, this.controller.minimum, this.controller.sectionBonus);
+        IPacket packet = new SPacketRequestBetting(this.controller.current,
+                !this.controller.isBigBlind() && !(this.controller.minimum == this.controller.getSmallBlind()),
+                this.controller.minimum,
+                this.controller.sectionBonus);
         this.controller.getPlayerList().sendToAll(packet);
     }
 

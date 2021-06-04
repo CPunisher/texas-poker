@@ -23,11 +23,14 @@ public class StateRespondBetting extends GameStateAdapter {
             player.getData().setSection(amount);
             this.controller.minimum = amount;
             this.controller.lastCheck = -1;
-        } else {
+        } else if (amount == -1) {
             // Check
             if (this.controller.lastCheck == -1) {
                 this.controller.lastCheck = this.controller.currentIdx;
             }
+        } else if (amount == -2) {
+            // give up
+            player.getData().setGiveUp(true);
         }
     }
 

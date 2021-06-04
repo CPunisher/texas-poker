@@ -64,12 +64,14 @@ public class GameController implements IGameState {
     public void respondBetting(ServerPlayer player, int amount) {
         if (amount > 0) {
             logger.info("{}({}) Place a {} yuan bet", player.getName(), player.getUuid(), amount);
-        } else {
+        } else if (amount == -1) {
             logger.info("{}({}) Check", player.getName(), player.getUuid());
+        } else if (amount == -2) {
+            logger.info("{}({}) Give up", player.getName(), player.getUuid());
         }
 
         this.currentState.respondBetting(player, amount);
-        if (this.getPlayerList().getPlayers().stream().filter(player1 -> player1.getMoney() > 0).count() > 0) {
+        if (this.getPlayerList().getAvailablePlayers().size() > 1) {
             this.nextBetting();
             this.requestBetting();
         } else {
@@ -95,6 +97,7 @@ public class GameController implements IGameState {
         do {
             this.currentIdx = (this.currentIdx + 1) % players.size();
         } while (players.get(this.currentIdx).isOut() ||
+                players.get(this.currentIdx).getData().isGiveUp() ||
                 (this.currentIdx != this.lastCheck && players.get(this.currentIdx).getMoney() <= 0));
     }
 

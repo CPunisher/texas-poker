@@ -1,5 +1,7 @@
 package com.buaa.texaspoker.client.gui;
 
+import com.buaa.texaspoker.network.play.SPacketRequestBetting;
+
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -22,20 +24,21 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
     private int money;
     private boolean canCheck;
 
-    public BettingDialog(Frame frame, int sectionBetting, int sectionBonus, int minimum, int money, boolean canCheck) {
-        super(frame, true);
+    public BettingDialog(Frame frame, SPacketRequestBetting packet, boolean canCheck) {
+        super(frame, false);
         this.setTitle("Betting");
-        this.sectionBetting = sectionBetting;
-        this.minimum = minimum;
-        this.money = money;
+        this.sectionBetting = packet.getSectionBetting();
+        this.minimum = packet.getMinimum();
+        this.money = packet.getPlayerMoney();
         this.canCheck = canCheck;
         this.textField = new JTextField(10);
         this.giveUpButton = new JButton("Give up");
         this.checkButton = new JButton("Check");
         this.betButton = new JButton("Bet");
         String msgString1 = "How much do you want to bet?";
-        String msgString2 = String.format("Your section betting: %d, Section Bonus: %d, Min: %d", sectionBetting, sectionBonus, minimum);
+        String msgString2 = String.format("Your section betting: %d, Section Bonus: %d, Min: %d", sectionBetting, packet.getSectionBonus(), minimum);
 
+        this.giveUpButton.setEnabled(packet.canGiveUp());
         this.betButton.setEnabled(false);
         this.checkButton.setEnabled(canCheck);
         Object[] array = {msgString1, msgString2, textField};
@@ -87,6 +90,8 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
         this.setResizable(false);
         this.pack();
         this.setLocationRelativeTo(frame);
+
+        if (this.minimum == 0) this.minimum = 1;
     }
 
     @Override

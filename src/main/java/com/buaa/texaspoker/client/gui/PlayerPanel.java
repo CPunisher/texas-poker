@@ -35,6 +35,9 @@ public class PlayerPanel extends AbstractGamePanel {
         } else if (player.isOut()) {
             g.setColor(Color.RED);
             g.drawString("Out", x + 10, th2 + 90);
+        } else if (player.getData().isGiveUp()) {
+            g.setColor(Color.LIGHT_GRAY);
+            g.drawString("Give up", x + 10, th2 + 90);
         }
     }
 
