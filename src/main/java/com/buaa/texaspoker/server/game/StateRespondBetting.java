@@ -21,7 +21,7 @@ public class StateRespondBetting extends GameStateAdapter {
             this.controller.sectionBonus += inc;
             player.setMoney(player.getMoney() - inc);
             player.getData().setSection(amount);
-            this.controller.minimum = amount;
+            this.controller.minimum = Math.max(this.controller.minimum, amount);
             this.controller.lastCheck = -1;
         } else if (amount == -1) {
             // Check

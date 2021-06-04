@@ -14,6 +14,7 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
 
     private JButton giveUpButton;
     private JButton checkButton;
+    private JButton allInButton;
     private JButton betButton;
     private JTextField textField;
     private JOptionPane optionPane;
@@ -34,6 +35,7 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
         this.textField = new JTextField(10);
         this.giveUpButton = new JButton("Give up");
         this.checkButton = new JButton("Check");
+        this.allInButton = new JButton("All in");
         this.betButton = new JButton("Bet");
         String msgString1 = "How much do you want to bet?";
         String msgString2 = String.format("Your section betting: %d, Section Bonus: %d, Min: %d", sectionBetting, packet.getSectionBonus(), minimum);
@@ -42,7 +44,7 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
         this.betButton.setEnabled(false);
         this.checkButton.setEnabled(canCheck);
         Object[] array = {msgString1, msgString2, textField};
-        Object[] options = {giveUpButton, checkButton, betButton};
+        Object[] options = {giveUpButton, checkButton, allInButton, betButton};
         optionPane = new JOptionPane(array,
                 JOptionPane.QUESTION_MESSAGE,
                 JOptionPane.YES_NO_CANCEL_OPTION,
@@ -54,6 +56,7 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
 
         this.giveUpButton.addActionListener(event -> setValueAndClose(-2));
         this.checkButton.addActionListener(event -> setValueAndClose(-1));
+        this.allInButton.addActionListener(event -> setValueAndClose(packet.getPlayerMoney()));
         this.betButton.addActionListener(event -> setValueAndClose(Integer.parseInt(textField.getText())));
 
         this.addWindowListener(new WindowAdapter() {

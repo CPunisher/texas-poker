@@ -71,7 +71,7 @@ public class GameController implements IGameState {
         }
 
         this.currentState.respondBetting(player, amount);
-        if (this.getPlayerList().getAvailablePlayers().size() > 1) {
+        if (this.getPlayerList().getAvailablePlayers().size() > 0) {
             this.nextBetting();
             this.requestBetting();
         } else {
