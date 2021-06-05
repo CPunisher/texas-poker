@@ -7,6 +7,7 @@ import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.Room;
 import com.buaa.texaspoker.network.PacketManager;
 import com.buaa.texaspoker.util.ConsoleUtil;
+import com.buaa.texaspoker.util.message.TranslateMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,7 +30,7 @@ public class GameClient {
 
     public void run() {
         this.init();
-        this.gameFrame = new GameFrame("德州扑克", this);
+        this.gameFrame = new GameFrame(new TranslateMessage("message.client.title").format(), this);
         this.gameFrame.setVisible(true);
     }
 
@@ -37,7 +38,7 @@ public class GameClient {
         System.setProperty("logFilename", "client");
         logger = LogManager.getLogger(GameClient.class);
 
-        logger.info("Type your name: ");
+        logger.info(new TranslateMessage("message.client.type_name").format());
         GameClient client = new GameClient(ConsoleUtil.nextLine());
 
         client.networkSystem.connect(8888);

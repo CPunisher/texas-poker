@@ -1,11 +1,13 @@
 package com.buaa.texaspoker.entity;
 
+import com.buaa.texaspoker.util.message.TranslateMessage;
+
 public enum PokerType {
-    ACE("黑桃"),
-    HEART("红桃"),
-    CLUB("梅花"),
-    DIAMOND("方片"),
-    UNKNOWN("?");
+    ACE("entity.poker.ace"),
+    HEART("entity.poker.heart"),
+    CLUB("entity.poker.club"),
+    DIAMOND("entity.poker.diamond"),
+    UNKNOWN("entity.poker.unknown");
 
     private String name;
 
@@ -14,6 +16,6 @@ public enum PokerType {
     }
 
     public String getName() {
-        return name;
+        return new TranslateMessage(this.name).format();
     }
 }

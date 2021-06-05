@@ -6,6 +6,7 @@ import com.buaa.texaspoker.network.PacketEncoder;
 import com.buaa.texaspoker.network.login.CPacketConnect;
 import com.buaa.texaspoker.network.login.ClientHandshakeHandler;
 import com.buaa.texaspoker.util.ConsoleUtil;
+import com.buaa.texaspoker.util.message.TranslateMessage;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -43,7 +44,7 @@ public class ClientNetworkSystem {
 
     public void connect(int port) {
         this.port = port;
-        logger.info("Type server ip: ");
+        logger.info(new TranslateMessage("message.client_network.type_ip").format());
         String ip = ConsoleUtil.nextLine();
         InetSocketAddress remoteAddress = new InetSocketAddress(ip, port);
         this.connectWithListener(remoteAddress);
@@ -61,10 +62,10 @@ public class ClientNetworkSystem {
                 future.channel().writeAndFlush(new CPacketConnect(name));
             } else {
                 endpoint.channel().eventLoop().schedule(() -> {
-                    logger.info("Connect timeout, please check and retype server ip:");
+                    logger.info(new TranslateMessage("message.client_network.timeout").format());
                     String ip = ConsoleUtil.nextLine();
                     InetSocketAddress remoteAddress = new InetSocketAddress(ip, port);
-                    logger.info("Connect to... " + remoteAddress);
+                    logger.info(new TranslateMessage("message.client_network.connecting").format() + remoteAddress);
                     connectWithListener(remoteAddress);
                 }, 0, TimeUnit.MILLISECONDS);
             }
@@ -80,10 +81,10 @@ public class ClientNetworkSystem {
                     client.getGui().dispose();
                 }
 
-                logger.info("Connection is closed or game is running, please check and retype server ip:");
+                logger.info(new TranslateMessage("message.client_network.retry").format());
                 String ip = ConsoleUtil.nextLine();
                 InetSocketAddress remoteAddress = new InetSocketAddress(ip, port);
-                logger.info("Connect to... " + remoteAddress);
+                logger.info(new TranslateMessage("message.client_network.connecting").format() + remoteAddress);
                 connectWithListener(remoteAddress);
             }, 0, TimeUnit.MILLISECONDS);
         }

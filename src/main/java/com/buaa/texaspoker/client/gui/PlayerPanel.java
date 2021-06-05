@@ -4,6 +4,7 @@ import com.buaa.texaspoker.client.GameClient;
 import com.buaa.texaspoker.entity.Poker;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.util.Constant;
+import com.buaa.texaspoker.util.message.TranslateMessage;
 
 import java.awt.*;
 
@@ -27,18 +28,18 @@ public class PlayerPanel extends AbstractGamePanel {
         g.fillOval(centerX, ovalY, radius, radius);
         g.fillPolygon(new int[] {x + width / 2 - radius / 2 - extend, x + width / 2 + radius / 2 + extend, x + width / 2}, new int [] {th1, th1, th2}, 3);
         g.setFont(g.getFont().deriveFont(14.0f));
-        g.drawString("昵称: " + player.getName(), x + 10, th2 + 30);
-        g.drawString("持币: " + player.getMoney(), x + 10, th2 + 50);
-        g.drawString("下注: " + player.getData().getSection(), x + 10, th2 + 70);
+        g.drawString(new TranslateMessage("gui.player_panel.name").format() + " " + player.getName(), x + 10, th2 + 30);
+        g.drawString(new TranslateMessage("gui.player_panel.money").format() + " " + player.getMoney(), x + 10, th2 + 50);
+        g.drawString(new TranslateMessage("gui.player_panel.bet").format() + " " + player.getData().getSection(), x + 10, th2 + 70);
         if (player.getData().isChecked()) {
             g.setColor(Color.LIGHT_GRAY);
-            g.drawString("Check", x + 10, th2 + 90);
+            g.drawString(new TranslateMessage("gui.player_panel.check").format(), x + 10, th2 + 90);
         } else if (player.isOut()) {
             g.setColor(Color.RED);
-            g.drawString("Out", x + 10, th2 + 90);
+            g.drawString(new TranslateMessage("gui.player_panel.out").format(), x + 10, th2 + 90);
         } else if (player.getData().isGiveUp()) {
             g.setColor(Color.LIGHT_GRAY);
-            g.drawString("Give up", x + 10, th2 + 90);
+            g.drawString(new TranslateMessage("gui.player_panel.give_up").format(), x + 10, th2 + 90);
         }
 
         int overlap = 30;
@@ -54,7 +55,7 @@ public class PlayerPanel extends AbstractGamePanel {
     public void draw(Graphics2D g) {
         g.setColor(Color.ORANGE);
         g.setFont(g.getFont().deriveFont(14.0f));
-        g.drawString("本轮奖池: " + client.getRoom().getRoundBonus(), 10, HEIGHT - 5);
+        g.drawString(new TranslateMessage("gui.player_panel.round_bonus").format() + " " + client.getRoom().getRoundBonus(), 10, HEIGHT - 5);
         int playerWidth = Constant.PLAYER_WIDTH, playerHeight = Constant.PLAYER_HEIGHT;
 
         // players

@@ -1,6 +1,9 @@
 package com.buaa.texaspoker.client.gui;
 
 import com.buaa.texaspoker.network.play.SPacketRequestBetting;
+import com.buaa.texaspoker.util.LanguageMap;
+import com.buaa.texaspoker.util.message.TextMessage;
+import com.buaa.texaspoker.util.message.TranslateMessage;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -15,7 +18,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
 public class BettingDialog extends JDialog implements PropertyChangeListener {
-
     private JButton giveUpButton;
     private JButton checkButton;
     private JButton allInButton;
@@ -30,17 +32,17 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
 
     public BettingDialog(Frame frame, SPacketRequestBetting packet, boolean canCheck) {
         super(frame, false);
-        this.setTitle("Betting");
+        this.setTitle(new TranslateMessage("gui.betting_dialog.title").format());
         this.sectionBetting = packet.getSectionBetting();
         this.minimum = packet.getMinimum();
         this.money = packet.getPlayerMoney();
         this.textField = new JTextField(10);
-        this.giveUpButton = new JButton("Give up");
-        this.checkButton = new JButton("Check");
-        this.allInButton = new JButton("All in");
-        this.betButton = new JButton("Bet");
-        String msgString1 = "How much do you want to bet?";
-        String msgString2 = String.format("Your section betting: %d, Section Bonus: %d, Min: %d", sectionBetting, packet.getSectionBonus(), minimum);
+        this.giveUpButton = new JButton(new TranslateMessage("gui.betting_dialog.give_up").format());
+        this.checkButton = new JButton(new TranslateMessage("gui.betting_dialog.check").format());
+        this.allInButton = new JButton(new TranslateMessage("gui.betting_dialog.all_in").format());
+        this.betButton = new JButton(new TranslateMessage("gui.betting_dialog.bet").format());
+        String msgString1 = new TranslateMessage("gui.betting_dialog.msg1").format();
+        String msgString2 = new TranslateMessage("gui.betting_dialog.msg2", sectionBetting, packet.getSectionBonus(), minimum).format();
 
         this.giveUpButton.setEnabled(packet.canGiveUp());
         this.betButton.setEnabled(false);

@@ -8,8 +8,8 @@ import com.buaa.texaspoker.entity.player.ClientPlayer;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.player.PlayerProfile;
 import com.buaa.texaspoker.network.NetworkManager;
-import com.buaa.texaspoker.util.ConsoleUtil;
 import com.buaa.texaspoker.util.message.TextMessage;
+import com.buaa.texaspoker.util.message.TranslateMessage;
 
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -34,15 +34,13 @@ public class ClientPlayHandler implements IClientPlayHandler {
         List<SPacketPlayerJoin.PlayerJoinData> serverList = packet.getData();
 
         boolean newPlayer = clientList.isEmpty();
-        Iterator<SPacketPlayerJoin.PlayerJoinData> iterator1 = serverList.iterator();
-        while (iterator1.hasNext()) {
-            SPacketPlayerJoin.PlayerJoinData data = iterator1.next();
-            if (!clientList.stream().anyMatch(player -> player.getUuid().equals(data.getUuid()))) {
+        for (SPacketPlayerJoin.PlayerJoinData data : serverList) {
+            if (clientList.stream().noneMatch(player -> player.getUuid().equals(data.getUuid()))) {
                 Player player = new ClientPlayer(data.getUuid(), data.getName(), client);
                 player.setMoney(data.getMoney());
                 clientList.add(player);
                 if (!newPlayer || data.getUuid().equals(client.getPlayer().getUuid())) {
-                    messagePanel.printMessage(new TextMessage("%s join the game", data.getName()));
+                    messagePanel.printMessage(new TranslateMessage("message.client_player.join", data.getName()));
                 }
             }
         }
@@ -56,7 +54,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
         while (iterator.hasNext()) {
             Player player = iterator.next();
             if (serverList.stream().noneMatch(profile -> profile.getUuid().equals(player.getUuid()))) {
-                messagePanel.printMessage(new TextMessage("%s leaves the game", player.getName()));
+                messagePanel.printMessage(new TranslateMessage("message.client_player.leave", player.getName()));
                 iterator.remove();
             }
         }
@@ -69,7 +67,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
 
     @Override
     public void processRemake(SPacketRemake packet) {
-        messagePanel.printMessage(new TextMessage("New start is preparing"));
+        messagePanel.printMessage(new TranslateMessage("message.client_player.remake"));
         this.client.getRoom().getPlayerList().forEach(player -> {
             player.setMoney(packet.getInitMoney());
             player.setOut(false);
@@ -79,11 +77,11 @@ public class ClientPlayHandler implements IClientPlayHandler {
 
     @Override
     public void processPlayerDraw(SPacketPlayerDraw packet) {
-        messagePanel.printMessage(new TextMessage("You get card: "));
+        messagePanel.printMessage(new TranslateMessage("message.client_player.get_card"));
         messagePanel.printMessage(new TextMessage(packet.getPokers()));
         this.client.getRoom().getPublicPokers().clear();
         this.client.getPlayer().getData().setPokers(packet.getPokers());
-        this.client.getRoom().getPlayerList().forEach(player -> player.clearData());
+        this.client.getRoom().getPlayerList().forEach(Player::clearData);
         client.getGui().loadPokers();
     }
 
@@ -94,8 +92,8 @@ public class ClientPlayHandler implements IClientPlayHandler {
         player.getData().setBetting(true);
         if (packet.getPlayerUuid().equals(client.getPlayer().getUuid())) {
             boolean canCheck = packet.getSectionBetting() >= packet.getMinimum();
-            messagePanel.printMessage(new TextMessage("Your section betting: %d, Section Bonus: %d", packet.getSectionBetting(), packet.getSectionBonus()));
-            messagePanel.printMessage(new TextMessage("How much do you want to bet [min: %d] [check with -1: %s]: ", packet.getMinimum(), canCheck));
+            messagePanel.printMessage(new TranslateMessage("message.client_player.bet_info", packet.getSectionBetting(), packet.getSectionBonus()));
+            messagePanel.printMessage(new TranslateMessage("message.client_player.check_info", packet.getMinimum(), canCheck));
 
             BettingDialog dialog = new BettingDialog(client.getGui(), packet, canCheck);
             dialog.addComponentListener(new ComponentAdapter() {
@@ -108,7 +106,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
             dialog.setVisible(true);
 
         } else {
-            messagePanel.printMessage(new TextMessage("Waiting for %s's betting [min: %d]", player.getName(), packet.getMinimum()));
+            messagePanel.printMessage(new TranslateMessage("message.client_player.wait", player.getName(), packet.getMinimum()));
         }
     }
 
@@ -116,15 +114,15 @@ public class ClientPlayHandler implements IClientPlayHandler {
     public void processRespondBetting(SPacketRespondBetting packet) {
         Player player = client.getRoom().getPlayerByUuid(packet.getProfile().getUuid());
         if (packet.getAmount() > 0) {
-            messagePanel.printMessage(new TextMessage("%s Place a %d yuan bet", packet.getProfile().getName(), packet.getAmount()));
+            messagePanel.printMessage(new TranslateMessage("message.client_player.player_bet", packet.getProfile().getName(), packet.getAmount()));
             player.setMoney(player.getMoney() + player.getData().getSection() - packet.getAmount());
             player.getData().setSection(packet.getAmount());
             client.getRoom().getPlayerList().forEach(player1 -> player1.getData().setChecked(false));
         } else if (packet.getAmount() == -1) {
-            messagePanel.printMessage(new TextMessage("%s Check", packet.getProfile().getName()));
+            messagePanel.printMessage(new TranslateMessage("message.client_player.player_check", packet.getProfile().getName()));
             player.getData().setChecked(true);
         } else if (packet.getAmount() == -2) {
-            messagePanel.printMessage(new TextMessage("%s Give up", packet.getProfile().getName()));
+            messagePanel.printMessage(new TranslateMessage("message.client_player.player_give_up", packet.getProfile().getName()));
             player.getData().setGiveUp(true);
         }
         player.getData().setBetting(false);
@@ -133,7 +131,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
     @Override
     public void processShowPoker(SPacketShowPoker packet) {
         Poker newPoker = new Poker(packet.getPoint(), packet.getPokerType());
-        messagePanel.printMessage(new TextMessage("Public poker is known: %s", newPoker));
+        messagePanel.printMessage(new TranslateMessage("message.client_player.show_poker", newPoker));
         client.getRoom().getPublicPokers().add(newPoker);
         client.getRoom().setRoundBonus(packet.getRoundBonus());
         for (Player player : client.getRoom().getPlayerList()) {
@@ -155,12 +153,12 @@ public class ClientPlayHandler implements IClientPlayHandler {
         winner.setMoney(packet.getWinnerMoney());
         winner.getData().setWinner(true);
         winner.getData().setPokers(packet.getPokers());
-        messagePanel.printMessage(new TextMessage("Round complete, winner: %s", packet.getWinner().getName()));
+        messagePanel.printMessage(new TranslateMessage("message.client_player.winner", packet.getWinner().getName()));
     }
 
     @Override
     public void onDisconnect() {
-        messagePanel.printMessage(new TextMessage("You have disconnected from server"));
+        messagePanel.printMessage(new TranslateMessage("message.client_player.disconnect"));
         this.networkManager.closeChannel();
     }
 

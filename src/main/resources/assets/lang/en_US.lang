@@ -1,0 +1,43 @@
+gui.betting_dialog.title = Betting
+gui.betting_dialog.give_up = Give up
+gui.betting_dialog.check = Check
+gui.betting_dialog.all_in = All in
+gui.betting_dialog.bet = Bet
+gui.betting_dialog.msg1 = How much do you want to bet?
+gui.betting_dialog.msg2 = Your section betting: %d, Section Bonus: %d, Min: %d
+
+gui.player_panel.name = Name
+gui.player_panel.money = Money
+gui.player_panel.bet = Bet
+gui.player_panel.check = Check
+gui.player_panel.out = Out
+gui.player_panel.give_up = Give up
+gui.player_panel.round_bonus = Round Bonus
+
+message.client_network.type_ip = Type server ip:
+message.client_network.timeout = Connect timeout, please check and retype server ip:
+message.client_network.connecting = Connect to...
+message.client_network.retry = Connection is closed or game is running, please check and retype server ip:
+
+message.client.type_name = Type your name:
+message.client.title = Texas Poker
+
+entity.poker.ace = Ace
+entity.poker.heart = Heart
+entity.poker.club = Club
+entity.poker.diamond = Diamond
+entity.poker.unknown = ?
+
+message.client_player.join = %s join the game
+message.client_player.leave = %s leaves the game
+message.client_player.remake = New start is preparing
+message.client_player.get_card = You get card:
+message.client_player.bet_info = Your section betting: %d, Section Bonus: %d
+message.client_player.check_info = How much do you want to bet [min: %d] [check with -1: %s]:
+message.client_player.wait = Waiting for %s's betting [min: %d]
+message.client_player.player_bet = %s Place a %d yuan bet
+message.client_player.player_check = %s Check
+message.client_player.player_give_up = %s Give up
+message.client_player.show_poker = Public poker is known: %s
+message.client_player.winner = Round complete, winner: %s
+message.client_player.disconnect = You have disconnected from server
