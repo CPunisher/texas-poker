@@ -3,6 +3,10 @@ package com.buaa.texaspoker.client.gui;
 import com.buaa.texaspoker.network.play.SPacketRequestBetting;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
@@ -42,7 +46,15 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
         this.betButton.setEnabled(false);
         this.checkButton.setEnabled(canCheck);
         Object[] array = {msgString1, msgString2, textField};
-        Object[] options = {giveUpButton, checkButton, allInButton, betButton};
+        JButton[] options = {giveUpButton, checkButton, allInButton, betButton};
+        for (JButton button : options) {
+            button.setForeground(Color.BLACK);
+            button.setBackground(Color.WHITE);
+            Border line = new LineBorder(Color.BLACK);
+            Border margin = new EmptyBorder(5, 15, 5, 15);
+            Border compound = new CompoundBorder(line, margin);
+            button.setBorder(compound);
+        }
         optionPane = new JOptionPane(array,
                 JOptionPane.QUESTION_MESSAGE,
                 JOptionPane.YES_NO_CANCEL_OPTION,
