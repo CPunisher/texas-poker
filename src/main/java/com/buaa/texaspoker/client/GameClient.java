@@ -7,6 +7,7 @@ import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.Room;
 import com.buaa.texaspoker.network.PacketManager;
 import com.buaa.texaspoker.util.ConsoleUtil;
+import com.buaa.texaspoker.util.PropertiesManager;
 import com.buaa.texaspoker.util.message.TranslateMessage;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -14,6 +15,7 @@ import org.apache.logging.log4j.Logger;
 public class GameClient {
 
     private static Logger logger;
+    private static PropertiesManager propertiesManager;
     private ClientNetworkSystem networkSystem;
     private GameFrame gameFrame;
     private Player player;
@@ -37,10 +39,17 @@ public class GameClient {
     public static void main(String[] args) {
         System.setProperty("logFilename", "client");
         logger = LogManager.getLogger(GameClient.class);
+        propertiesManager = PropertiesManager.getInstance();
+        propertiesManager.init();
 
-        logger.info(new TranslateMessage("message.client.type_name").format());
-        GameClient client = new GameClient(ConsoleUtil.nextLine());
-
+        String playerName = propertiesManager.getValue("name");
+        if (playerName == null) {
+            logger.info(new TranslateMessage("message.client.type_name").format());
+            playerName = ConsoleUtil.nextLine();
+            propertiesManager.writeValue("name", playerName);
+        }
+        logger.info(new TranslateMessage("message.client.player_name", playerName).format());
+        GameClient client = new GameClient(playerName);
         client.networkSystem.connect(8888);
     }
 

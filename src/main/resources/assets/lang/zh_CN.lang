@@ -1,0 +1,44 @@
+gui.betting_dialog.title = 请下注
+gui.betting_dialog.give_up = 放弃
+gui.betting_dialog.check = Check
+gui.betting_dialog.all_in = All in
+gui.betting_dialog.bet = 下注
+gui.betting_dialog.msg1 = 你要下注多少钱?
+gui.betting_dialog.msg2 = 你本回合已下注: %d, 本回合所有玩家下注: %d, 最小下注: %d
+
+gui.player_panel.name = 昵称
+gui.player_panel.money = 持币
+gui.player_panel.bet = 已下注
+gui.player_panel.check = Check
+gui.player_panel.out = 出局
+gui.player_panel.give_up = 放弃
+gui.player_panel.round_bonus = 本轮奖池
+
+message.client_network.type_ip = 请输入服务器地址:
+message.client_network.timeout = 连接超时, 请检查并重新输入服务器地址:
+message.client_network.connecting = 正在连接...
+message.client_network.retry = 连接已关闭或游戏正在运行中, 请检查并重新输入服务器地址:
+
+message.client.type_name = 请输入你的昵称:
+message.client.player_name = 玩家名称: %s
+message.client.title = 德州扑克
+
+entity.poker.ace = 黑桃
+entity.poker.heart = 红桃
+entity.poker.club = 梅花
+entity.poker.diamond = 方片
+entity.poker.unknown = ?
+
+message.client_player.join = %s 加入游戏
+message.client_player.leave = %s 离开游戏
+message.client_player.remake = 游戏准备开始...
+message.client_player.get_card = 你抽到了:
+message.client_player.bet_info = 你本回合已下注: %d, 本回合所有玩家下注: %d
+message.client_player.check_info = 你要下注多少 [最小: %d] [能否Check: %s]:
+message.client_player.wait = 等待 %s 下注 [最小: %d]
+message.client_player.player_bet = %s 下注 %d 元
+message.client_player.player_check = %s Check
+message.client_player.player_give_up = %s 放弃了
+message.client_player.show_poker = 荷官亮牌: %s
+message.client_player.winner = 本轮游戏结束, 胜者: %s
+message.client_player.disconnect = 你从服务器掉线了

@@ -20,6 +20,7 @@ message.client_network.connecting = Connect to...
 message.client_network.retry = Connection is closed or game is running, please check and retype server ip:
 
 message.client.type_name = Type your name:
+message.client.player_name = Player name: %s
 message.client.title = Texas Poker
 
 entity.poker.ace = Ace
@@ -33,7 +34,7 @@ message.client_player.leave = %s leaves the game
 message.client_player.remake = New start is preparing
 message.client_player.get_card = You get card:
 message.client_player.bet_info = Your section betting: %d, Section Bonus: %d
-message.client_player.check_info = How much do you want to bet [min: %d] [check with -1: %s]:
+message.client_player.check_info = How much do you want to bet [min: %d] [check: %s]:
 message.client_player.wait = Waiting for %s's betting [min: %d]
 message.client_player.player_bet = %s Place a %d yuan bet
 message.client_player.player_check = %s Check
