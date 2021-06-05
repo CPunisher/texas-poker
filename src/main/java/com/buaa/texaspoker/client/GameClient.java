@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 public class GameClient {
 
-    private static Logger logger = LogManager.getLogger(GameClient.class);
+    private static Logger logger;
     private ClientNetworkSystem networkSystem;
     private GameFrame gameFrame;
     private String playerName;
@@ -39,6 +39,9 @@ public class GameClient {
     }
 
     public static void main(String[] args) {
+        System.setProperty("logFilename", "client");
+        logger = LogManager.getLogger(GameClient.class);
+
         Scanner scanner = new Scanner(System.in);
         logger.info("Type your name: ");
         GameClient client = new GameClient(scanner.nextLine());

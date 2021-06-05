@@ -23,7 +23,6 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
     private int sectionBetting;
     private int minimum;
     private int money;
-    private boolean canCheck;
 
     public BettingDialog(Frame frame, SPacketRequestBetting packet, boolean canCheck) {
         super(frame, false);
@@ -31,7 +30,6 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
         this.sectionBetting = packet.getSectionBetting();
         this.minimum = packet.getMinimum();
         this.money = packet.getPlayerMoney();
-        this.canCheck = canCheck;
         this.textField = new JTextField(10);
         this.giveUpButton = new JButton("Give up");
         this.checkButton = new JButton("Check");
@@ -56,7 +54,7 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
 
         this.giveUpButton.addActionListener(event -> setValueAndClose(-2));
         this.checkButton.addActionListener(event -> setValueAndClose(-1));
-        this.allInButton.addActionListener(event -> setValueAndClose(packet.getPlayerMoney()));
+        this.allInButton.addActionListener(event -> setValueAndClose(packet.getPlayerMoney() + packet.getSectionBetting()));
         this.betButton.addActionListener(event -> setValueAndClose(Integer.parseInt(textField.getText())));
 
         this.addWindowListener(new WindowAdapter() {

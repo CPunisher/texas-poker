@@ -1,6 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Configuration xmlns="http://logging.apache.org/log4j/2.0/config">
+<Configuration>
     <Appenders>
+        <RollingFile name="FILEOUT" fileName="logs/${sys:logFilename}.log" filePattern="logs/${sys:logFilename}-%d{yyyy-MM-dd HH}.log">
+            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"></PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1"/>
+                <SizeBasedTriggeringPolicy size="100MB"/>
+            </Policies>
+        </RollingFile>
         <Console name="STDOUT" target="PatternLayout">
             <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %c{1} - %msg%n"></PatternLayout>
         </Console>
@@ -8,6 +15,7 @@
     <Loggers>
         <Root level="INFO">
             <AppenderRef ref="STDOUT"></AppenderRef>
+            <AppenderRef ref="FILEOUT"></AppenderRef>
         </Root>
     </Loggers>
 </Configuration>

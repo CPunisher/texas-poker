@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 public class GameServer {
 
-    private static Logger logger = LogManager.getLogger(GameServer.class);
+    private static Logger logger;
     private ServerNetworkSystem networkSystem;
     private PlayerList playerList;
     private GameController controller;
@@ -54,6 +54,8 @@ public class GameServer {
     }
 
     public static void main(String[] args) {
+        System.setProperty("logFilename", "server");
+        logger = LogManager.getLogger(GameServer.class);
         GameServer server = new GameServer();
         server.run();
     }
