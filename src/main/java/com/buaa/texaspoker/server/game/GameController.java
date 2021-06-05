@@ -32,12 +32,18 @@ public class GameController implements IGameState {
 
     public GameController(GameServer server) {
         this.server = server;
-        this.currentState = new StatePlayerEnter(this);
+        this.currentState = GameStateFactory.getState(StatePlayerEnter.class, this);
     }
 
     @Override
     public void playerEnter(NetworkManager networkManager, ServerPlayer player) {
         this.currentState.playerEnter(networkManager, player);
+    }
+
+    @Override
+    public void remake() {
+        logger.info("Reset players' state");
+        this.currentState.remake();
     }
 
     public void start() {
@@ -51,7 +57,7 @@ public class GameController implements IGameState {
     public void requestBetting() {
         if (this.currentIdx == this.lastCheck) {
             if (this.nextShow >= this.publicPokers.length) {
-                this.currentState.end();
+                this.end();
             } else {
                 this.currentState.showNextPoker();
                 this.currentState.requestBetting();

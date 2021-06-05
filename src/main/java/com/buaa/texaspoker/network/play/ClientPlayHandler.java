@@ -68,6 +68,16 @@ public class ClientPlayHandler implements IClientPlayHandler {
     }
 
     @Override
+    public void processRemake(SPacketRemake packet) {
+        messagePanel.printMessage(new TextMessage("New start is preparing"));
+        this.client.getRoom().getPlayerList().forEach(player -> {
+            player.setMoney(packet.getInitMoney());
+            player.setOut(false);
+            player.clearData();
+        });
+    }
+
+    @Override
     public void processPlayerDraw(SPacketPlayerDraw packet) {
         messagePanel.printMessage(new TextMessage("You get card: "));
         messagePanel.printMessage(new TextMessage(packet.getPokers()));

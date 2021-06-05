@@ -3,7 +3,9 @@ package com.buaa.texaspoker.server.game;
 import com.buaa.texaspoker.entity.Poker;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.player.PlayerProfile;
+import com.buaa.texaspoker.entity.player.ServerPlayer;
 import com.buaa.texaspoker.network.IPacket;
+import com.buaa.texaspoker.network.NetworkManager;
 import com.buaa.texaspoker.network.play.SPacketGameEnd;
 import com.buaa.texaspoker.network.play.SPacketPlayerOut;
 import com.buaa.texaspoker.util.PokerComparator;
@@ -43,9 +45,16 @@ public class StateEnd extends GameStateAdapter {
     }
 
     @Override
-    public void start() {
-        IGameState nextState = GameStateFactory.getState(StateStart.class, this.controller);
+    public void playerEnter(NetworkManager networkManager, ServerPlayer player) {
+        IGameState nextState = GameStateFactory.getState(StatePlayerEnter.class, this.controller);
         this.controller.setGameState(nextState);
-        nextState.start();
+        nextState.playerEnter(networkManager, player);
+    }
+
+    @Override
+    public void remake() {
+        IGameState nextState = GameStateFactory.getState(StateRemake.class, this.controller);
+        this.controller.setGameState(nextState);
+        nextState.remake();
     }
 }

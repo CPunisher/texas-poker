@@ -34,6 +34,7 @@ public class StateStart extends GameStateAdapter {
 
         this.controller.nextShow = 0;
         this.controller.roundBonus = 0;
+        this.controller.sectionBonus = 0;
         this.controller.lastCheck = -1;
         this.controller.minimum = this.controller.getSmallBlind();
         this.controller.startIdx = this.randomStartIdx();

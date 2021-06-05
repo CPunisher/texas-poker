@@ -11,14 +11,13 @@ public class StatePlayerEnter extends GameStateAdapter {
 
     @Override
     public void playerEnter(NetworkManager networkManager, ServerPlayer player) {
-        player.setMoney(200);
         this.controller.getPlayerList().addPlayer(networkManager, player);
     }
 
     @Override
-    public void start() {
-        IGameState nextState = GameStateFactory.getState(StateStart.class, this.controller);
+    public void remake() {
+        IGameState nextState = GameStateFactory.getState(StateRemake.class, this.controller);
         this.controller.setGameState(nextState);
-        nextState.start();
+        nextState.remake();
     }
 }

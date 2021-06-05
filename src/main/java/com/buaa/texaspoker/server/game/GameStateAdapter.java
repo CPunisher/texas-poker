@@ -17,6 +17,11 @@ public class GameStateAdapter implements IGameState {
     }
 
     @Override
+    public void remake() {
+
+    }
+
+    @Override
     public void start() {
 
     }

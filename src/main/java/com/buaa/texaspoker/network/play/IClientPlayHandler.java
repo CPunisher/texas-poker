@@ -10,6 +10,8 @@ public interface IClientPlayHandler extends INetHandler {
 
     void processPlayerDisconnect(SPacketPlayerDisconnect packet);
 
+    void processRemake(SPacketRemake packet);
+
     void processPlayerDraw(SPacketPlayerDraw packet);
 
     void processRequestBetting(SPacketRequestBetting packet);

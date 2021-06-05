@@ -8,6 +8,8 @@ public interface IGameState {
 
     void playerEnter(NetworkManager networkManager, ServerPlayer player);
 
+    void remake();
+
     void start();
 
     void requestBetting();

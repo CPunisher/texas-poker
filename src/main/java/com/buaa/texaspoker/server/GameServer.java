@@ -40,6 +40,8 @@ public class GameServer {
                     this.controller.start();
                 } else if ("list".equals(cmd)) {
                     logger.info("Players: {}", this.playerList.getPlayers().stream().map(Player::getName).collect(Collectors.toList()));
+                } else if ("remake".equals(cmd)) {
+                    this.controller.remake();
                 }
             }
         }).start();
