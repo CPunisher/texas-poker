@@ -13,7 +13,7 @@ public class GameStateAdapter implements IGameState {
 
     @Override
     public void playerEnter(NetworkManager networkManager, ServerPlayer player) {
-
+        networkManager.closeChannel();
     }
 
     @Override

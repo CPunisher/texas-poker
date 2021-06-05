@@ -6,34 +6,29 @@ import com.buaa.texaspoker.entity.player.ClientPlayer;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.Room;
 import com.buaa.texaspoker.network.PacketManager;
+import com.buaa.texaspoker.util.ConsoleUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.net.InetSocketAddress;
-import java.util.Scanner;
 
 public class GameClient {
 
     private static Logger logger;
     private ClientNetworkSystem networkSystem;
     private GameFrame gameFrame;
-    private String playerName;
     private Player player;
     private Room room;
 
     public GameClient(String playerName) {
         PacketManager.init();
-        this.playerName = playerName;
-        room = new Room();
         this.networkSystem = new ClientNetworkSystem(this, playerName);
     }
 
-    private void connect(InetSocketAddress remoteAddress) {
-        logger.info("Connect to... " + remoteAddress);
-        this.networkSystem.connect(remoteAddress);
+    public void init() {
+        room = new Room();
     }
 
     public void run() {
+        this.init();
         this.gameFrame = new GameFrame("德州扑克", this);
         this.gameFrame.setVisible(true);
     }
@@ -42,13 +37,10 @@ public class GameClient {
         System.setProperty("logFilename", "client");
         logger = LogManager.getLogger(GameClient.class);
 
-        Scanner scanner = new Scanner(System.in);
         logger.info("Type your name: ");
-        GameClient client = new GameClient(scanner.nextLine());
+        GameClient client = new GameClient(ConsoleUtil.nextLine());
 
-        logger.info("Type server ip: ");
-        String ip = scanner.nextLine();
-        client.connect(new InetSocketAddress(ip, 8888));
+        client.networkSystem.connect(8888);
     }
 
     public GameFrame getGui() {
