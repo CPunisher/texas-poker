@@ -88,6 +88,7 @@ public class LoginFrame extends JFrame implements ActionListener {
         this.add(panel);
         this.pack();
 
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -104,6 +105,7 @@ public class LoginFrame extends JFrame implements ActionListener {
             SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                 @Override
                 protected Void doInBackground() throws Exception {
+                    propertiesManager.writeValue("name", name);
                     ChannelFuture endpoint = LoginFrame.this.networkSystem.connect(remoteAddress)
                             .addListener((ChannelFutureListener) future -> {
                                 if (future.isSuccess()) {
