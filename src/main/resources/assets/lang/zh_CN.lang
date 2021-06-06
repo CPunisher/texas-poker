@@ -14,10 +14,16 @@ gui.player_panel.out = 出局
 gui.player_panel.give_up = 放弃
 gui.player_panel.round_bonus = 本轮奖池
 
-message.client_network.type_ip = 请输入服务器地址:
-message.client_network.timeout = 连接超时, 请检查并重新输入服务器地址:
-message.client_network.connecting = 正在连接...
-message.client_network.retry = 连接已关闭或游戏正在运行中, 请检查并重新输入服务器地址:
+gui.login_frame.title = 登录
+gui.login_frame.name = 名称
+gui.login_frame.host = 主机
+gui.login_frame.connect = 连接
+gui.login_frame.cancel = 取消
+
+message.client_network.type_ip = 请输入服务器地址
+message.client_network.timeout = 连接超时, 请检查并重新输入服务器地址
+message.client_network.connecting = 正在连接到 %s...
+message.client_network.retry = 连接已关闭或游戏正在运行中, 请检查并重新输入服务器地址
 
 message.client.type_name = 请输入你的昵称:
 message.client.player_name = 玩家名称: %s

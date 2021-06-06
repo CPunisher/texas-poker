@@ -14,10 +14,16 @@ gui.player_panel.out = Out
 gui.player_panel.give_up = Give up
 gui.player_panel.round_bonus = Round Bonus
 
-message.client_network.type_ip = Type server ip:
-message.client_network.timeout = Connect timeout, please check and retype server ip:
-message.client_network.connecting = Connect to...
-message.client_network.retry = Connection is closed or game is running, please check and retype server ip:
+gui.login_frame.title = Login
+gui.login_frame.name = Name
+gui.login_frame.host = Host
+gui.login_frame.connect = Connect
+gui.login_frame.cancel = Cancel
+
+message.client_network.type_ip = Type server ip
+message.client_network.timeout = Connect timeout, please check and retype server ip
+message.client_network.connecting = Connect to %s...
+message.client_network.retry = Connection is closed or game is running, please check and retype server ip
 
 message.client.type_name = Type your name:
 message.client.player_name = Player name: %s

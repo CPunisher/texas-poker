@@ -2,11 +2,11 @@ package com.buaa.texaspoker.client;
 
 
 import com.buaa.texaspoker.client.gui.GameFrame;
+import com.buaa.texaspoker.client.gui.LoginFrame;
 import com.buaa.texaspoker.entity.player.ClientPlayer;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.entity.Room;
 import com.buaa.texaspoker.network.PacketManager;
-import com.buaa.texaspoker.util.ConsoleUtil;
 import com.buaa.texaspoker.util.PropertiesManager;
 import com.buaa.texaspoker.util.message.TranslateMessage;
 import org.apache.logging.log4j.LogManager;
@@ -18,12 +18,18 @@ public class GameClient {
     private static PropertiesManager propertiesManager;
     private ClientNetworkSystem networkSystem;
     private GameFrame gameFrame;
+    private LoginFrame loginFrame;
     private Player player;
     private Room room;
 
-    public GameClient(String playerName) {
+    public GameClient() {
         PacketManager.init();
-        this.networkSystem = new ClientNetworkSystem(this, playerName);
+        this.networkSystem = new ClientNetworkSystem(this);
+        this.loginFrame = new LoginFrame(new TranslateMessage("gui.login_frame.title").format(), this, this.networkSystem);
+    }
+
+    public void login() {
+        this.loginFrame.setVisible(true);
     }
 
     public void init() {
@@ -34,6 +40,7 @@ public class GameClient {
         this.init();
         this.gameFrame = new GameFrame(new TranslateMessage("message.client.title").format(), this);
         this.gameFrame.setVisible(true);
+        this.loginFrame.setVisible(false);
     }
 
     public static void main(String[] args) {
@@ -42,15 +49,16 @@ public class GameClient {
         propertiesManager = PropertiesManager.getInstance();
         propertiesManager.init();
 
-        String playerName = propertiesManager.getValue("name");
-        if (playerName == null) {
-            logger.info(new TranslateMessage("message.client.type_name").format());
-            playerName = ConsoleUtil.nextLine();
-            propertiesManager.writeValue("name", playerName);
+        GameClient client = new GameClient();
+        client.login();
+    }
+
+    public void backToLogin() {
+        if (this.gameFrame.isVisible()) {
+            this.gameFrame.dispose();
+            this.gameFrame = null;
+            this.loginFrame.setVisible(true);
         }
-        logger.info(new TranslateMessage("message.client.player_name", playerName).format());
-        GameClient client = new GameClient(playerName);
-        client.networkSystem.connect(8888);
     }
 
     public GameFrame getGui() {

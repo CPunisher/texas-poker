@@ -9,6 +9,7 @@ public class LanguageMap {
     private final Map<String, String> languageList = new HashMap<>();
 
     private LanguageMap() {
+        this.load("en_US");
         String lang = PropertiesManager.getInstance().getValue("language", "en_US");
         InputStream inputStream = LanguageMap.class.getClassLoader().getResourceAsStream("assets/lang/" + lang + ".lang");
         if (inputStream == null) {
