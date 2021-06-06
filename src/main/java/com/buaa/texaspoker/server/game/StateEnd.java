@@ -46,9 +46,24 @@ public class StateEnd extends GameStateAdapter {
 
     @Override
     public void playerEnter(NetworkManager networkManager, ServerPlayer player) {
-        IGameState nextState = GameStateFactory.getState(StatePlayerEnter.class, this.controller);
-        this.controller.setGameState(nextState);
-        nextState.playerEnter(networkManager, player);
+        if (this.controller.isRoundEnd()) {
+            IGameState nextState = GameStateFactory.getState(StatePlayerEnter.class, this.controller);
+            this.controller.setGameState(nextState);
+            nextState.playerEnter(networkManager, player);
+        } else {
+            super.playerEnter(networkManager, player);
+        }
+    }
+
+    @Override
+    public void start() {
+        if (this.controller.isRoundEnd()) {
+            super.start();
+        } else {
+            IGameState nextState = GameStateFactory.getState(StateStart.class, this.controller);
+            this.controller.setGameState(nextState);
+            nextState.start();
+        }
     }
 
     @Override

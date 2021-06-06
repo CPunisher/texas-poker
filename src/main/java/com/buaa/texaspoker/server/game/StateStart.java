@@ -3,11 +3,14 @@ package com.buaa.texaspoker.server.game;
 import com.buaa.texaspoker.entity.Deck;
 import com.buaa.texaspoker.entity.player.Player;
 import com.buaa.texaspoker.network.play.SPacketPlayerDraw;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.List;
 import java.util.Random;
 
 public class StateStart extends GameStateAdapter {
+    private static final Logger logger = LogManager.getLogger();
     private Deck deck;
     private Random random = new Random();
 
@@ -17,6 +20,7 @@ public class StateStart extends GameStateAdapter {
 
     @Override
     public void start() {
+        logger.info("Starting game...");
         deck = Deck.initDeck();
         for (Player player : this.controller.getPlayerList().getAlivePlayers()) {
             player.clearData();
@@ -39,7 +43,8 @@ public class StateStart extends GameStateAdapter {
         this.controller.minimum = this.controller.getSmallBlind();
         this.controller.startIdx = this.randomStartIdx();
         this.controller.currentIdx = this.controller.startIdx;
-   }
+        logger.info("Round start !");
+    }
 
    private int randomStartIdx() {
         List<Player> players = this.controller.getPlayerList().getPlayers();

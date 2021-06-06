@@ -68,6 +68,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
     @Override
     public void processRemake(SPacketRemake packet) {
         messagePanel.printMessage(new TranslateMessage("message.client_player.remake"));
+        this.client.getRoom().setRoundBonus(0);
         this.client.getRoom().getPlayerList().forEach(player -> {
             player.setMoney(packet.getInitMoney());
             player.setOut(false);
@@ -80,6 +81,7 @@ public class ClientPlayHandler implements IClientPlayHandler {
         messagePanel.printMessage(new TranslateMessage("message.client_player.get_card"));
         messagePanel.printMessage(new TextMessage(packet.getPokers()));
         this.client.getRoom().getPublicPokers().clear();
+        this.client.getRoom().setRoundBonus(0);
         this.client.getPlayer().getData().setPokers(packet.getPokers());
         this.client.getRoom().getPlayerList().forEach(Player::clearData);
         client.getGui().loadPokers();

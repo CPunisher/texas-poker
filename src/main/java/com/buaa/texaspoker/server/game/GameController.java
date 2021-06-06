@@ -47,9 +47,7 @@ public class GameController implements IGameState {
     }
 
     public void start() {
-        logger.info("Starting game...");
         this.currentState.start();
-        logger.info("Round start !");
         this.requestBetting();
     }
 
@@ -110,6 +108,11 @@ public class GameController implements IGameState {
                 players.get(this.currentIdx).getData().isGiveUp() ||
                 (this.currentIdx != this.lastCheck && players.get(this.currentIdx).getMoney() <= 0));
         return true;
+    }
+
+
+    public boolean isRoundEnd() {
+        return this.getPlayerList().getAlivePlayers().size() == 1;
     }
 
     protected void setGameState(IGameState state) {
