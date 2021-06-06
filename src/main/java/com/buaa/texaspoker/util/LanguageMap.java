@@ -20,7 +20,7 @@ public class LanguageMap {
 
     public void load(String lang) {
         try(InputStream inputStream = LanguageMap.class.getClassLoader().getResourceAsStream("assets/lang/" + lang + ".lang")) {
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 int eqIdx = line.indexOf("=");
