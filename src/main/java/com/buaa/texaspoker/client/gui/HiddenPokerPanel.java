@@ -46,10 +46,10 @@ public class HiddenPokerPanel extends JPanel implements MouseListener {
         else {
             sx = (point - 1) % 13 * 300;
             switch (pokerType) {
-                case ACE -> sy = 435 * 3;
-                case HEART -> sy = 435 * 2;
-                case CLUB -> sy = 0;
-                case DIAMOND -> sy = 435;
+                case ACE:  sy = 435 * 3; break;
+                case HEART: sy = 435 * 2; break;
+                case CLUB: sy = 0; break;
+                case DIAMOND: sy = 435; break;
             }
         }
         g.drawImage(pokerImage, dx, dy, dx + width, dy + height, sx, sy, sx + 300, sy + 435, null);
