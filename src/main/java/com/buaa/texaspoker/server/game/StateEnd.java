@@ -9,6 +9,8 @@ import com.buaa.texaspoker.network.NetworkManager;
 import com.buaa.texaspoker.network.play.SPacketGameEnd;
 import com.buaa.texaspoker.network.play.SPacketPlayerOut;
 import com.buaa.texaspoker.util.PokerComparator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -22,6 +24,8 @@ import java.util.stream.Collectors;
  * @see PokerComparator
  */
 public class StateEnd extends GameStateAdapter {
+    private static final Logger logger = LogManager.getLogger();
+
     /**
      * 玩家手中牌组的结果比较器
      */
@@ -53,6 +57,7 @@ public class StateEnd extends GameStateAdapter {
                 this.controller.getPlayerList().sendToAll(new SPacketPlayerOut(player.generateProfile()));
             }
         }
+        logger.info(String.format("%s(%s) wins!", winner.getName(), winner.getUuid()));
     }
 
     // 允许跳转到玩家加入状态
