@@ -10,11 +10,35 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.Objects;
 
+/**
+ * 可隐藏的扑克牌画布
+ * 绘制扑克牌，并且可以根据需要修改显示或者隐藏扑克牌的状态
+ * @author CPunisher
+ */
 public class HiddenPokerPanel extends JPanel implements MouseListener {
+    /**
+     * 未知扑克牌对象，可用户绘制隐藏或者未知的扑克牌
+     */
     private static final Poker UNKNOWN = new Poker(0, PokerType.UNKNOWN);
+
+    /**
+     * 需要绘制的扑克牌
+     */
     private Poker poker;
+
+    /**
+     * 当前是否处于隐藏的状态
+     */
     private boolean hidden = true;
+
+    /**
+     * 是否总是显示扑克牌
+     */
     private boolean alwaysShow;
+
+    /**
+     * 扑克牌的绘图资源
+     */
     private static Image pokerImage;
     static {
         pokerImage = new ImageIcon(Objects.requireNonNull(HiddenPokerPanel.class.getClassLoader().getResource("assets/image/poker.png"))).getImage();
@@ -26,6 +50,12 @@ public class HiddenPokerPanel extends JPanel implements MouseListener {
         this.alwaysShow = alwaysShow;
     }
 
+    /**
+     * 构造扑克牌画布对象，如果输入的扑克牌为空那么就默认为未知扑克牌
+     * @param poker 需要绘制的扑克牌
+     * @param alwaysShow 是否总是显示
+     * @return 扑克牌画布对象
+     */
     public static JPanel create(Poker poker, boolean alwaysShow) {
         return new HiddenPokerPanel(poker == null ? UNKNOWN : poker, alwaysShow);
     }
@@ -35,6 +65,15 @@ public class HiddenPokerPanel extends JPanel implements MouseListener {
         drawPoker(g, getPoker(), 0, 0, getWidth(), getHeight());
     }
 
+    /**
+     * 绘制扑克牌
+     * @param g 进行绘制的{@link Graphics}对象
+     * @param poker 需要绘制的扑克牌对象
+     * @param dx 绘制的目标x坐标
+     * @param dy 绘制的目标y坐标
+     * @param width 绘制的扑克牌宽度
+     * @param height 绘制的扑克牌高度
+     */
     public static void drawPoker(Graphics g, Poker poker, int dx, int dy, int width, int height) {
         int point = poker.getPoint();
         PokerType pokerType = poker.getPokerType();
@@ -56,6 +95,10 @@ public class HiddenPokerPanel extends JPanel implements MouseListener {
 
     }
 
+    /**
+     * 根据当前的显示状态获得当前绘制的扑克牌
+     * @return 如果是隐藏的则返回未知扑克牌，否则返回实际的扑克牌
+     */
     public Poker getPoker() {
         return this.hidden && !this.alwaysShow ? UNKNOWN : poker;
     }
@@ -79,11 +122,19 @@ public class HiddenPokerPanel extends JPanel implements MouseListener {
 
     }
 
+    /**
+     * 鼠标悬停时扑克牌显示
+     * @param e 鼠标事件
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
         this.hidden = false;
     }
 
+    /**
+     * 鼠标离开时隐藏扑克牌
+     * @param e 鼠标事件
+     */
     @Override
     public void mouseExited(MouseEvent e) {
         this.hidden = true;

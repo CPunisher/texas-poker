@@ -4,6 +4,10 @@ import javax.swing.*;
 import javax.swing.plaf.basic.BasicScrollBarUI;
 import java.awt.*;
 
+/**
+ * 消息面板的滚动条
+ * @author CPunisher
+ */
 public class MessageScrollBar extends BasicScrollBarUI {
 
     private final Dimension dimension = new Dimension();

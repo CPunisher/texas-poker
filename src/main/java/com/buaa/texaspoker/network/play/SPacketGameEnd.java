@@ -9,10 +9,25 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 服务器发送的本回合/本局游戏结束的数据包
+ * @author CPunisher
+ */
 public class SPacketGameEnd implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 本回合/本局游戏的胜者玩家数据
+     */
     private PlayerProfile winner;
+
+    /**
+     * 胜者的持币数量
+     */
     private int winnerMoney;
+
+    /**
+     * 胜者手中的扑克牌
+     */
     private List<Poker> pokers;
 
     public SPacketGameEnd() {}

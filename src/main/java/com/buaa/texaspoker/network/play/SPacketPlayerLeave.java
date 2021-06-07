@@ -9,8 +9,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 服务器发送的玩家退出游戏的数据包
+ * @author CPunisher
+ */
 public class SPacketPlayerLeave implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 当前仍在游戏中的玩家列表
+     */
     private List<PlayerProfile> profiles = new LinkedList<>();
 
     public SPacketPlayerLeave() {

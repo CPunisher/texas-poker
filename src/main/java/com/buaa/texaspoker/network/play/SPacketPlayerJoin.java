@@ -8,8 +8,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * 服务器发送的玩家加入游戏的数据包
+ * @author CPunisher
+ */
 public class SPacketPlayerJoin implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 当前在游戏中的玩家数据列表
+     */
     private List<PlayerJoinData> data = new LinkedList<>();
 
     public SPacketPlayerJoin() {

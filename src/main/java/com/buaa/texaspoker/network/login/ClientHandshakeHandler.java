@@ -28,7 +28,5 @@ public class ClientHandshakeHandler implements IClientHandshakeHandler {
     }
 
     @Override
-    public void onDisconnect() {
-
-    }
+    public void onDisconnect() {}
 }

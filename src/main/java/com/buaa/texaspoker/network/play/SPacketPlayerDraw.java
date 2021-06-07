@@ -8,8 +8,15 @@ import com.buaa.texaspoker.network.PacketBuffer;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 服务器发送给对应玩家抽到的扑克牌的数据包
+ * @author CPunisher
+ */
 public class SPacketPlayerDraw implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 抽到的扑克牌列表
+     */
     private List<Poker> pokers;
 
     public SPacketPlayerDraw() {}

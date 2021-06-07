@@ -9,9 +9,23 @@ import org.apache.logging.log4j.Logger;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * 游戏开始的状态
+ * @author CPunisher
+ * @see IGameState
+ * @see Deck
+ */
 public class StateStart extends GameStateAdapter {
     private static final Logger logger = LogManager.getLogger();
+
+    /**
+     * 初始游戏扑克牌组
+     */
     private Deck deck;
+
+    /**
+     * 随机数生成对象
+     */
     private Random random = new Random();
 
     public StateStart(GameController controller) {
@@ -22,6 +36,8 @@ public class StateStart extends GameStateAdapter {
     public void start() {
         logger.info("Starting game...");
         deck = Deck.initDeck();
+
+        // 初始化玩家数据
         for (Player player : this.controller.getPlayerList().getAlivePlayers()) {
             player.clearData();
             player.getData().getPokers().add(deck.draw());
@@ -36,6 +52,7 @@ public class StateStart extends GameStateAdapter {
             player.networkManager.sendPacket(new SPacketPlayerDraw(player.getData().getPokers()));
         }
 
+        // 初始化房间数据
         this.controller.nextShow = 0;
         this.controller.roundBonus = 0;
         this.controller.sectionBonus = 0;
@@ -46,6 +63,10 @@ public class StateStart extends GameStateAdapter {
         logger.info("Round start !");
     }
 
+    /**
+     * 随机获得开始下注的玩家(小盲)，确保此玩家的可下注性
+     * @return 可下注的玩家索引
+     */
    private int randomStartIdx() {
         List<Player> players = this.controller.getPlayerList().getPlayers();
         int idx = random.nextInt(players.size());
@@ -55,6 +76,7 @@ public class StateStart extends GameStateAdapter {
         return idx;
    }
 
+    // 允许跳转至请求下注状态
     @Override
     public void requestBetting() {
         IGameState nextState = GameStateFactory.getState(StateRequestBetting.class, this.controller);

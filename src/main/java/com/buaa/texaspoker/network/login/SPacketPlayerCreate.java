@@ -5,9 +5,20 @@ import com.buaa.texaspoker.network.PacketBuffer;
 
 import java.util.UUID;
 
+/**
+ * 服务器发送的创建玩家信息的数据包
+ * @author CPunisher
+ */
 public class SPacketPlayerCreate implements IPacket<IClientHandshakeHandler> {
 
+    /**
+     * 玩家的{@link UUID}
+     */
     private UUID uuid;
+
+    /**
+     * 玩家的名称
+     */
     private String name;
 
     public SPacketPlayerCreate() {}

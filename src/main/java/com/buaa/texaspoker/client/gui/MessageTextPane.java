@@ -3,6 +3,10 @@ package com.buaa.texaspoker.client.gui;
 import javax.swing.*;
 import javax.swing.text.*;
 
+/**
+ * 为{@link JTextPane}添加自动换行
+ * @author CPunisher
+ */
 public class MessageTextPane extends JTextPane {
 
     private static class WrapLabelView extends LabelView {

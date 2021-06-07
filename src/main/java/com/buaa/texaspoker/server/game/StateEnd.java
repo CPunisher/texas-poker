@@ -15,7 +15,16 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 游戏结束的状态
+ * @author CPunisher
+ * @see IGameState
+ * @see PokerComparator
+ */
 public class StateEnd extends GameStateAdapter {
+    /**
+     * 玩家手中牌组的结果比较器
+     */
     private Comparator<List<Poker>> comparator = new PokerComparator();
 
     public StateEnd(GameController controller) {
@@ -24,12 +33,14 @@ public class StateEnd extends GameStateAdapter {
 
     @Override
     public void end() {
+        // 每个玩家组合公共扑克牌组
         List<Player> result = this.controller.getPlayerList().getPlayers().stream()
                 .filter(player -> !player.isOut() && !player.getData().isGiveUp())
                 .collect(Collectors.toList());
         for (Player player : result) {
             Collections.addAll(player.getData().getPokers(), this.controller.publicPokers);
         }
+        // 判定牌型最大的玩家
         Player winner = result.stream()
                 .max((p1, p2) -> comparator.compare(p1.getData().getPokers(), p2.getData().getPokers()))
                 .orElseThrow(() -> new IllegalStateException("No player wins."));
@@ -44,6 +55,7 @@ public class StateEnd extends GameStateAdapter {
         }
     }
 
+    // 允许跳转到玩家加入状态
     @Override
     public void playerEnter(NetworkManager networkManager, ServerPlayer player) {
         if (this.controller.isRoundEnd()) {
@@ -55,6 +67,7 @@ public class StateEnd extends GameStateAdapter {
         }
     }
 
+    // 允许跳转到游戏开始状态
     @Override
     public void start() {
         if (this.controller.isRoundEnd()) {
@@ -66,6 +79,7 @@ public class StateEnd extends GameStateAdapter {
         }
     }
 
+    // 允许跳转到重置游戏状态
     @Override
     public void remake() {
         IGameState nextState = GameStateFactory.getState(StateRemake.class, this.controller);

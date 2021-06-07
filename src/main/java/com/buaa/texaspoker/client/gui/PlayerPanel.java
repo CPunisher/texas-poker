@@ -8,15 +8,36 @@ import com.buaa.texaspoker.util.message.TranslateMessage;
 
 import java.awt.*;
 
+/**
+ * 绘制玩家列表和信息的画布
+ * @author CPunisher
+ * @see Player
+ */
 public class PlayerPanel extends AbstractGamePanel {
 
+    /**
+     * 玩家信息画布的宽度
+     */
     private static final int WIDTH = 1000;
+
+    /**
+     * 玩家信息画布的高度
+     */
     private static final int HEIGHT = 470;
 
     public PlayerPanel(GameClient client) {
         super(client, WIDTH, HEIGHT);
     }
 
+    /**
+     * 绘制1名玩家的信息框
+     * @param g 需要会绘制的{@link Graphics2D}
+     * @param player 绘制的玩家
+     * @param x 绘制的x坐标
+     * @param y 绘制的y坐标
+     * @param width 信息框的宽度
+     * @param height 信息框的高度
+     */
     private void drawPlayerInfo(Graphics2D g, Player player, int x, int y, int width, int height) {
         int radius = 40, gap = 12, extend = 10;
         int centerX = x + width / 2 - radius / 2;
@@ -58,7 +79,7 @@ public class PlayerPanel extends AbstractGamePanel {
         g.drawString(new TranslateMessage("gui.player_panel.round_bonus").format() + " " + client.getRoom().getRoundBonus(), 10, HEIGHT - 5);
         int playerWidth = Constant.PLAYER_WIDTH, playerHeight = Constant.PLAYER_HEIGHT;
 
-        // players
+        // 计算间隔等，循环绘制每一名玩家的信息框
         int gutter = 20;
         int column = (this.getWidth() - gutter) / (playerWidth + gutter);
         int margin = (this.getWidth() - column * playerWidth - (column - 1) * gutter) / 2;

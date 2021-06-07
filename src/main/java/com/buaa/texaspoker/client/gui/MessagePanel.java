@@ -11,13 +11,37 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * 显示消息的面板
+ * @author CPunisher
+ * @see ITextMessage
+ */
 public class MessagePanel extends JPanel implements IMessagePanel {
     private static final Logger logger = LogManager.getLogger();
+
+    /**
+     * 消息面板的宽度
+     */
     private static final int WIDTH = 280;
+
+    /**
+     * 消息面板的高度
+     */
     private static final int HEIGHT = 470;
+
+    /**
+     * 消息面板的消息列表
+     */
     private List<ITextMessage> messageList = new LinkedList<>();
 
+    /**
+     * 包含HTML样式的富文本显示框
+     */
     private JTextPane textPane;
+
+    /**
+     * 消息面板的滚动条包装
+     */
     private JScrollPane scrollPane;
 
     public MessagePanel(GameClient client) {
@@ -49,11 +73,19 @@ public class MessagePanel extends JPanel implements IMessagePanel {
         super.paintComponent(g);
     }
 
+    /**
+     * 将消息添加至消息列表，日志文件也做记录
+     * @param textMessage 需要打印的消息
+     */
     public void printMessage(ITextMessage textMessage) {
         this.addMessage(textMessage);
         logger.info(textMessage.format());
     }
 
+    /**
+     * 消息添加到消息列表的具体实现，将消息格式化之后插入富文本框
+     * @param textMessage 需要打印的消息
+     */
     private void addMessage(ITextMessage textMessage) {
         this.messageList.add(textMessage);
 
@@ -63,10 +95,18 @@ public class MessagePanel extends JPanel implements IMessagePanel {
         updateScroll();
     }
 
+    /**
+     * 更新滚动条
+     */
     private void updateScroll() {
         this.textPane.setCaretPosition(this.textPane.getStyledDocument().getLength());
     }
 
+    /**
+     * 对{@link Document#insertString(int, String, AttributeSet)}的封装，设定插入消息至文本框末尾，并且自带换行
+     * @param text 需要打印的消息文本
+     * @param attributeSet 消息文本的样式属性
+     */
     private void insertString(String text, SimpleAttributeSet attributeSet) {
         text += '\n';
         Document document = this.textPane.getStyledDocument();

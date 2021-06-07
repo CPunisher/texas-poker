@@ -2,11 +2,17 @@ package com.buaa.texaspoker.server.game;
 
 import com.buaa.texaspoker.entity.player.ServerPlayer;
 
+/**
+ * 响应下注状态
+ * @author CPunisher
+ * @see IGameState
+ */
 public class StateRespondBetting extends GameStateAdapter {
     public StateRespondBetting(GameController controller) {
         super(controller);
     }
 
+    // 允许跳转到请求下注状态
     @Override
     public void requestBetting() {
         IGameState nextState = GameStateFactory.getState(StateRequestBetting.class, this.controller);
@@ -30,11 +36,12 @@ public class StateRespondBetting extends GameStateAdapter {
                 this.controller.lastCheck = this.controller.currentIdx;
             }
         } else if (amount == -2) {
-            // give up
+            // Give up
             player.getData().setGiveUp(true);
         }
     }
 
+    // 允许跳转到展示公共扑克牌状态
     @Override
     public void showNextPoker() {
         IGameState nextState = GameStateFactory.getState(StateNextPoker.class, this.controller);
@@ -42,6 +49,7 @@ public class StateRespondBetting extends GameStateAdapter {
         nextState.showNextPoker();
     }
 
+    // 允许跳转到游戏结束状态
     @Override
     public void end() {
         IGameState nextState = GameStateFactory.getState(StateEnd.class, this.controller);

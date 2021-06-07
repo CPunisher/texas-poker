@@ -14,9 +14,22 @@ import io.netty.handler.codec.LengthFieldPrepender;
 
 import java.net.SocketAddress;
 
+/**
+ * 客户端的网络系统控制类
+ * 控制客户端的网络操作，包括网络服务的启动、连接服务端、字节数据处理
+ * @author CPunisher
+ * @see NetworkManager
+ */
 public class ClientNetworkSystem {
 
+    /**
+     * 附属的{@link GameClient}的引用
+     */
     private final GameClient client;
+
+    /**
+     * 客户端频道节点
+     */
     private ChannelFuture endpoint;
 
     private Bootstrap bootstrap;
@@ -35,10 +48,22 @@ public class ClientNetworkSystem {
         return this.endpoint;
     }
 
+    /**
+     * 重置连接时的网络处理器
+     */
     public void resetHandler() {
         bootstrap.handler(new BootstrapChannelInitializer());
     }
 
+    /**
+     * 客户端网络频道的默认处理器
+     * <p>对于发送的数据包，首先使用{@link PacketEncoder}序列化为字节数据，然后使用{@link LengthFieldPrepender}
+     * 通过填充空字节、写入固定数据长度来实现固定长度发送字节数据
+     * </p>
+     * <p>对于接收字节的数据，首先使用{@link LengthFieldBasedFrameDecoder}以固定长度拆包，解决TCP协议的粘包
+     * 问题，将 1024 字节的数据包通过{@link PacketDecoder}反序列化，最后交给{@link NetworkManager}进行处理
+     * </p>
+     */
     private class BootstrapChannelInitializer extends ChannelInitializer<SocketChannel> {
         @Override
         protected void initChannel(SocketChannel socketChannel) throws Exception {

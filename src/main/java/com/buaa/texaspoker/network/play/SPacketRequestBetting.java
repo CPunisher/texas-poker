@@ -6,13 +6,40 @@ import com.buaa.texaspoker.network.PacketBuffer;
 
 import java.util.UUID;
 
+/**
+ * 服务器发送的请求玩家下注的数据包
+ * @author CPunisher
+ */
 public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 当前下注者的{@link UUID}
+     */
     private UUID playerUuid;
+
+    /**
+     * 当前下注者是否能够放弃
+     */
     private boolean canGiveUp;
+
+    /**
+     * 当前下注者的本回合已下注金额
+     */
     private int sectionBetting;
+
+    /**
+     * 下注的最小数量
+     */
     private int minimum;
+
+    /**
+     * 当前下注者持有的金额
+     */
     private int playerMoney;
+
+    /**
+     * 本回合的累计下注
+     */
     private int sectionBonus;
 
     public SPacketRequestBetting() {}

@@ -3,7 +3,6 @@ package com.buaa.texaspoker.client.gui;
 import com.buaa.texaspoker.client.ClientNetworkSystem;
 import com.buaa.texaspoker.client.GameClient;
 import com.buaa.texaspoker.network.login.CPacketConnect;
-import com.buaa.texaspoker.util.ConsoleUtil;
 import com.buaa.texaspoker.util.PropertiesManager;
 import com.buaa.texaspoker.util.message.ITextMessage;
 import com.buaa.texaspoker.util.message.TranslateMessage;
@@ -23,20 +22,62 @@ import java.awt.event.ActionListener;
 import java.net.InetSocketAddress;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * 登录窗口
+ * @author CPunisher
+ */
 public class LoginFrame extends JFrame implements ActionListener {
 
     private static final Logger logger = LogManager.getLogger();
+
+    /**
+     * {@link PropertiesManager} 单例对象
+     */
     private static PropertiesManager propertiesManager = PropertiesManager.getInstance();
 
+    /**
+     * 名称标签
+     */
     private JLabel nameLabel;
+
+    /**
+     * 主机地址标签
+     */
     private JLabel hostLabel;
+
+    /**
+     * 消息内容标签
+     */
     private JLabel messageLabel;
+
+    /**
+     * 名称输入框
+     */
     private JTextField nameTextField;
+
+    /**
+     * 主机地址输入框
+     */
     private JTextField hostTextField;
+
+    /**
+     * 连接按钮
+     */
     private JButton connectButton;
+
+    /**
+     * 取消按钮
+     */
     private JButton cancelButton;
 
+    /**
+     * 附属{@link GameClient}的引用
+     */
     private final GameClient client;
+
+    /**
+     * 客户端的网络管理对象
+     */
     private final ClientNetworkSystem networkSystem;
 
     public LoginFrame(String title, GameClient client, ClientNetworkSystem networkSystem) {
@@ -102,6 +143,7 @@ public class LoginFrame extends JFrame implements ActionListener {
             printMessage(new TranslateMessage("message.client_network.connecting", remoteAddress));
             this.connectButton.setEnabled(false);
 
+            // 异步执行登录网络操作，防止阻塞AWT绘图线程
             SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
                 @Override
                 protected Void doInBackground() throws Exception {
@@ -132,11 +174,19 @@ public class LoginFrame extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * 打印消息，这里包括修改消息标签{@link LoginFrame#messageLabel} 以及打印到日志
+     * @param textMessage 需要打印的消息对象
+     */
     private void printMessage(ITextMessage textMessage) {
         this.messageLabel.setText("<html>" + textMessage.format() + "</html>");
         logger.info(textMessage.format());
     }
 
+    /**
+     * 为按钮设置统一的样式
+     * @param button 需要设置的按钮
+     */
     public static void setButtonStyle(JButton button) {
         button.setForeground(Color.BLACK);
         button.setBackground(Color.WHITE);

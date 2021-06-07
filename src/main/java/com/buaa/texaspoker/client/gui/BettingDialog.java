@@ -1,8 +1,6 @@
 package com.buaa.texaspoker.client.gui;
 
 import com.buaa.texaspoker.network.play.SPacketRequestBetting;
-import com.buaa.texaspoker.util.LanguageMap;
-import com.buaa.texaspoker.util.message.TextMessage;
 import com.buaa.texaspoker.util.message.TranslateMessage;
 
 import javax.swing.*;
@@ -17,17 +15,60 @@ import java.awt.event.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * 下注对话框
+ * @author CPunisher
+ */
 public class BettingDialog extends JDialog implements PropertyChangeListener {
+
+    /**
+     * 放弃按钮
+     */
     private JButton giveUpButton;
+
+    /**
+     * Check 按钮
+     */
     private JButton checkButton;
+
+    /**
+     * All In 按钮
+     */
     private JButton allInButton;
+
+    /**
+     * 下注按钮
+     */
     private JButton betButton;
+
+    /**
+     * 下注值输入框
+     */
     private JTextField textField;
+
+    /**
+     * 整个窗体的面板
+     */
     private JOptionPane optionPane;
 
+    /**
+     * 实际的下注的值
+     */
     private int value;
+
+    /**
+     * 本回合的累计赌注
+     */
     private int sectionBetting;
+
+    /**
+     * 本次下注的最少金额
+     */
     private int minimum;
+
+    /**
+     * 玩家持有的金额
+     */
     private int money;
 
     public BettingDialog(Frame frame, SPacketRequestBetting packet, boolean canCheck) {
@@ -128,6 +169,12 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
         }
     }
 
+    /**
+     * 验证玩家输入的下注金额是否合法，包括是否为整数的判断和金额是否符合规则
+     * <p>下注金额需要满足：不能超过玩家持有金额，且必须是最小金额的整倍数</p>
+     * @param text 用户输入的下注
+     * @return 如果下注合法则返回<code>True</code>
+     */
     private boolean validate(String text) {
         try {
             int amount = Integer.parseInt(text);
@@ -145,11 +192,19 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
         }
     }
 
+    /**
+     * 完成下注，关闭窗口
+     * @param value 下注的金额
+     */
     private void setValueAndClose(int value) {
         this.value = value;
         this.setVisible(false);
     }
 
+    /**
+     * 获得下注金额数值
+     * @return 下注金额
+     */
     public int getValue() {
         return value;
     }

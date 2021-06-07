@@ -3,8 +3,15 @@ package com.buaa.texaspoker.network.play;
 import com.buaa.texaspoker.network.IPacket;
 import com.buaa.texaspoker.network.PacketBuffer;
 
+/**
+ * 服务器发送的准备开始游戏，重置玩家状态的数据包
+ * @author CPunisher
+ */
 public class SPacketRemake implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 玩家的初始金额
+     */
     private int initMoney;
 
     public SPacketRemake() {}

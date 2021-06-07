@@ -19,36 +19,73 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.UUID;
 
+/**
+ * 为了方便的读写自定义数据的{@link ByteBuf}的装饰器
+ * @author CPunisher
+ * @see ByteBuf
+ */
 public class PacketBuffer extends ByteBuf {
 
-    private ByteBuf byteBuf;
+    /**
+     * 被装饰的{@link ByteBuf}
+     */
+    private final ByteBuf byteBuf;
+
+    /**
+     * 通过装饰{@link ByteBuf}形成对他的扩展
+     * @param byteBuf 被装饰的{@link ByteBuf}
+     */
     public PacketBuffer(ByteBuf byteBuf) {
         this.byteBuf = byteBuf;
     }
 
+    /**
+     * 序列化{@link Poker}对象，拆分为2个<code>int</code>数据写入字节缓冲
+     * @param poker 写入的扑克牌对象
+     */
     public void writePoker(Poker poker) {
         this.writeInt(poker.getPoint());
         this.writeInt(poker.getPokerType().ordinal());
     }
 
+    /**
+     * 反序列化{@link Poker}对象，读入2个<code>int</code>构造
+     * @return 读取的扑克牌对象
+     */
     public Poker readPoker() {
         return new Poker(this.readInt(), PokerType.values()[this.readInt()]);
     }
 
+    /**
+     * 序列化{@link PlayerProfile}对象，拆分为2个{@link String}
+     * @param profile 写入的扑克牌对象
+     */
     public void writeProfile(PlayerProfile profile) {
         this.writeString(profile.getUuid().toString());
         this.writeString(profile.getName());
     }
 
+    /**
+     * 反序列化{@link PlayerProfile}，读取2个{@link String}转化为{@link UUID}和玩家名称
+     * @return 读取的玩家信息类对象
+     */
     public PlayerProfile readProfile() {
         return new PlayerProfile(UUID.fromString(this.readString()), this.readString());
     }
 
+    /**
+     * 序列化{@link String}对象，写入字符串的长度，再以<code>UTF-8</code>编码为字节写入
+     * @param str 写入的字符串对象
+     */
     public void writeString(String str) {
         this.writeInt(str.length());
         this.writeCharSequence(str, StandardCharsets.UTF_8);
     }
 
+    /**
+     * 反序列化{@link String}对象，读取字符串长度，再以<code>UTF-8</code>编码构造
+     * @return 读取的字符串对象
+     */
     public String readString() {
         int length = this.readInt();
         return (String) this.readCharSequence(length, StandardCharsets.UTF_8);

@@ -6,9 +6,20 @@ import com.buaa.texaspoker.network.PacketBuffer;
 
 import java.util.UUID;
 
+/**
+ * 客户端发送的响应下注的数据包
+ * @author CPunisher
+ */
 public class CPacketRespondBetting implements IPacket<IServerPlayHandler> {
 
+    /**
+     * 下注的玩家数据
+     */
     private PlayerProfile profile;
+
+    /**
+     * 下注的金额
+     */
     private int amount;
 
     public CPacketRespondBetting() {}

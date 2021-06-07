@@ -5,10 +5,25 @@ import com.buaa.texaspoker.entity.PokerType;
 import com.buaa.texaspoker.network.IPacket;
 import com.buaa.texaspoker.network.PacketBuffer;
 
+/**
+ * 服务器发送的展示公共扑克牌的数据包
+ * @author CPunisher
+ */
 public class SPacketShowPoker implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 展示的扑克牌的点数
+     */
     private int point;
+
+    /**
+     * 展示的扑克牌的类型
+     */
     private PokerType pokerType;
+
+    /**
+     * 本轮游戏的累计赌注
+     */
     private int roundBonus;
 
     public SPacketShowPoker() {}

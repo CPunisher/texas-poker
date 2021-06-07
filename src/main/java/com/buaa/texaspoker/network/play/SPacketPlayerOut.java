@@ -4,8 +4,15 @@ import com.buaa.texaspoker.entity.player.PlayerProfile;
 import com.buaa.texaspoker.network.IPacket;
 import com.buaa.texaspoker.network.PacketBuffer;
 
+/**
+ * 服务器发送的玩家因没有钱而出局的数据包
+ * @author CPunisher
+ */
 public class SPacketPlayerOut implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 出局的玩家的信息
+     */
     private PlayerProfile profile;
 
     public SPacketPlayerOut() {}

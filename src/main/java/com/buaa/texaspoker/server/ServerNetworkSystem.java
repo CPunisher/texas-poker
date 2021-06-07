@@ -17,10 +17,24 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * 服务端的网络系统控制类
+ * 控制所有服务端的网络操作，包括网络服务的启动、字节数据处理
+ * @author CPunisher
+ * @see NetworkManager
+ */
 public class ServerNetworkSystem {
 
     private static final Logger logger = LogManager.getLogger();
+
+    /**
+     * 附属的{@link GameServer}的引用
+     */
     private final GameServer server;
+
+    /**
+     * 服务端频道节点
+     */
     private ChannelFuture endpoint;
 
     public ServerNetworkSystem(GameServer server) {
@@ -48,13 +62,5 @@ public class ServerNetworkSystem {
                     }
                 });
         this.endpoint = bootstrap.bind(8888).syncUninterruptibly();
-    }
-
-    public void shutdown() {
-        try {
-            this.endpoint.channel().closeFuture().sync();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 }

@@ -4,9 +4,20 @@ import com.buaa.texaspoker.entity.player.PlayerProfile;
 import com.buaa.texaspoker.network.IPacket;
 import com.buaa.texaspoker.network.PacketBuffer;
 
+/**
+ * 服务器发送的玩家下注结果的数据包
+ * @author CPunisher
+ */
 public class SPacketRespondBetting implements IPacket<IClientPlayHandler> {
 
+    /**
+     * 下注玩家的信息对象
+     */
     private PlayerProfile profile;
+
+    /**
+     * 下注的数量
+     */
     private int amount;
 
     public SPacketRespondBetting() {}
