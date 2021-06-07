@@ -84,11 +84,12 @@ public class GameController implements IGameState {
     @Override
     public void playerEnter(NetworkManager networkManager, ServerPlayer player) {
         this.currentState.playerEnter(networkManager, player);
+        logger.info("To reset players' state and prepare for gaming, use: remake");
     }
 
     @Override
     public void remake() {
-        logger.info("Reset players' state");
+        logger.info("Reset players' state.To start game, use: start");
         this.currentState.remake();
     }
 
@@ -134,6 +135,8 @@ public class GameController implements IGameState {
                 this.currentState.showNextPoker();
             }
             this.currentState.end();
+            logger.info("To reset players' state, use: remake");
+            logger.info("To start a new round, use: start");
         }
     }
 
