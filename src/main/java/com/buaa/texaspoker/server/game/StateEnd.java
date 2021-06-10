@@ -58,6 +58,8 @@ public class StateEnd extends GameStateAdapter {
             }
         }
         logger.info(String.format("%s(%s) wins!", winner.getName(), winner.getUuid()));
+        logger.info("To reset players' state and prepare for a new game, use: remake");
+        logger.info("To start another section, use: start");
     }
 
     // 允许跳转到玩家加入状态
