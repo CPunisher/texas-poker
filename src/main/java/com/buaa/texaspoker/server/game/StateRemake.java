@@ -24,6 +24,7 @@ public class StateRemake extends GameStateAdapter {
             player.clearData();
         });
         this.controller.getPlayerList().sendToAll(new SPacketRemake(initMoney));
+        this.controller.startIdx = -1;
     }
 
     // 允许跳转至游戏开始状态

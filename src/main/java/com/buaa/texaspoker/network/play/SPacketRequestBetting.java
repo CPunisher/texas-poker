@@ -23,6 +23,11 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
     private boolean canGiveUp;
 
     /**
+     * 是否为小盲
+     */
+    private boolean isSmallBlind;
+
+    /**
      * 当前下注者的本回合已下注金额
      */
     private int sectionBetting;
@@ -44,9 +49,10 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
 
     public SPacketRequestBetting() {}
 
-    public SPacketRequestBetting(Player player, boolean canGiveUp, int minimum, int sectionBonus) {
+    public SPacketRequestBetting(Player player, boolean canGiveUp, boolean isSmallBlind, int minimum, int sectionBonus) {
         this.playerUuid = player.getUuid();
         this.canGiveUp = canGiveUp;
+        this.isSmallBlind = isSmallBlind;
         this.sectionBetting = player.getData().getSection();
         this.minimum = minimum;
         this.playerMoney = player.getMoney();
@@ -57,6 +63,7 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
     public void readData(PacketBuffer buf) throws Exception {
         this.playerUuid = UUID.fromString(buf.readString());
         this.canGiveUp = buf.readBoolean();
+        this.isSmallBlind = buf.readBoolean();
         this.sectionBetting = buf.readInt();
         this.minimum = buf.readInt();
         this.playerMoney = buf.readInt();
@@ -67,6 +74,7 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
     public void writeData(PacketBuffer buf) throws Exception {
         buf.writeString(playerUuid.toString());
         buf.writeBoolean(canGiveUp);
+        buf.writeBoolean(isSmallBlind);
         buf.writeInt(sectionBetting);
         buf.writeInt(minimum);
         buf.writeInt(playerMoney);
@@ -100,5 +108,9 @@ public class SPacketRequestBetting implements IPacket<IClientPlayHandler> {
 
     public boolean canGiveUp() {
         return canGiveUp;
+    }
+
+    public boolean isSmallBlind() {
+        return isSmallBlind;
     }
 }

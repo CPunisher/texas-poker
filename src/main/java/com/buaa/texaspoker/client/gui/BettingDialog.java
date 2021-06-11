@@ -62,6 +62,11 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
     private int sectionBetting;
 
     /**
+     * 是否为小盲
+     */
+    private boolean isSmallBlind;
+
+    /**
      * 本次下注的最少金额
      */
     private int minimum;
@@ -77,6 +82,7 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
         this.sectionBetting = packet.getSectionBetting();
         this.minimum = packet.getMinimum();
         this.money = packet.getPlayerMoney();
+        this.isSmallBlind = packet.isSmallBlind();
         this.textField = new JTextField(10);
         this.giveUpButton = new JButton(new TranslateMessage("gui.betting_dialog.give_up").format());
         this.checkButton = new JButton(new TranslateMessage("gui.betting_dialog.check").format());
@@ -180,6 +186,7 @@ public class BettingDialog extends JDialog implements PropertyChangeListener {
             int amount = Integer.parseInt(text);
             int inc = amount - sectionBetting;
             if (amount == sectionBetting
+                    || (isSmallBlind && amount != minimum)
 //                    || (!canCheck && amount == -1)
                     || (amount > 0 && amount % minimum != 0)
 //                    || (amount < 0 && amount != -2)

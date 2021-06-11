@@ -128,7 +128,7 @@ public class GameController implements IGameState {
         this.currentState.respondBetting(player, amount);
         if (this.getPlayerList().getAvailablePlayers().size() > 0) {
             // 只要还有能参与下注的玩家就继续请求下注
-            this.nextBetting();
+            this.currentIdx = this.nextBetting(this.currentIdx);
             this.requestBetting();
         } else {
             while (this.nextShow < this.publicPokers.length) {
@@ -152,19 +152,20 @@ public class GameController implements IGameState {
 
     /**
      * 找到下一个可以参与下注的玩家
-     * @return 如果能找到则返回<code>True</code>
+     * @param beg 开始搜索的下标
+     * @return 如果能找到则返回玩家的下标
      */
-    protected boolean nextBetting() {
+    protected int nextBetting(int beg) {
         List<Player> players = this.getPlayerList().getPlayers();
         List<Integer> checked = new LinkedList<>(); // 防止死循环的去重检测
         do {
-            this.currentIdx = (this.currentIdx + 1) % players.size();
-            if (checked.contains(this.currentIdx)) return false;
-            checked.add(this.currentIdx);
-        } while (players.get(this.currentIdx).isOut() ||
-                players.get(this.currentIdx).getData().isGiveUp() ||
-                (this.currentIdx != this.lastCheck && players.get(this.currentIdx).getMoney() <= 0));
-        return true;
+            beg = (beg + 1) % players.size();
+            if (checked.contains(beg)) return -1;
+            checked.add(beg);
+        } while (players.get(beg).isOut() ||
+                players.get(beg).getData().isGiveUp() ||
+                (beg != this.lastCheck && players.get(beg).getMoney() <= 0));
+        return beg;
     }
 
 
@@ -190,6 +191,14 @@ public class GameController implements IGameState {
      */
     public boolean isBigBlind() {
         return isFirstSection() && sectionBonus == getSmallBlind();
+    }
+
+    /**
+     * 判断当前是不是小盲，条件是一轮游戏中的首个回合，且下注量为小盲值
+     * @return 如果是小盲则返回<code>True</code>
+     */
+    public boolean isSmallBlind() {
+        return isFirstSection() && minimum == getSmallBlind();
     }
 
     /**

@@ -58,7 +58,7 @@ public class StateStart extends GameStateAdapter {
         this.controller.sectionBonus = 0;
         this.controller.lastCheck = -1;
         this.controller.minimum = this.controller.getSmallBlind();
-        this.controller.startIdx = this.randomStartIdx();
+        this.controller.startIdx = this.controller.nextBetting(this.controller.startIdx);
         this.controller.currentIdx = this.controller.startIdx;
         logger.info("Round start !");
     }
@@ -66,7 +66,9 @@ public class StateStart extends GameStateAdapter {
     /**
      * 随机获得开始下注的玩家(小盲)，确保此玩家的可下注性
      * @return 可下注的玩家索引
+     * @deprecated 设定为第一个玩家开始，不需要随机了
      */
+    @Deprecated
    private int randomStartIdx() {
         List<Player> players = this.controller.getPlayerList().getPlayers();
         int idx = random.nextInt(players.size());
