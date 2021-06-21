@@ -76,7 +76,7 @@ public class GameFrame extends JFrame implements IGameMainFrame, Runnable {
         this.pack();
 
         this.setLocationRelativeTo(null);
-        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     @Override
